@@ -5,7 +5,11 @@ plugins {
 
 android {
     namespace = "com.emilakerman.qrcodegenereator"
-    compileSdk = 33
+    compileSdk = 34
+
+    viewBinding {
+        enable = true
+    }
 
     defaultConfig {
         applicationId = "com.emilakerman.qrcodegenereator"
@@ -36,7 +40,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
