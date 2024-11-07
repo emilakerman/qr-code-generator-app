@@ -1,6 +1,8 @@
 package com.emilakerman.qrcodegenereator
 
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -10,10 +12,13 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.drawToBitmap
+import androidx.fragment.app.Fragment
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.zxing.BarcodeFormat
@@ -32,11 +37,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fun View.hideKeyboard() {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(windowToken, 0)
+        }
+
         fun setupToolbar() {
             setSupportActionBar(binding.bottomAppBar)
             val toolbar: MaterialToolbar = binding.bottomAppBar;
             setSupportActionBar(toolbar)
-            toolbar.title = "Qr Code Generator"
+            toolbar.title = ""
         }
         setupToolbar()
 
@@ -45,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener;
             } else {
                 generateQrCode()
+                it.hideKeyboard()
             }
         }
         binding.saveButton.setOnClickListener {
