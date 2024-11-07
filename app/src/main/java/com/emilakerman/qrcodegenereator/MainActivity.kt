@@ -7,10 +7,15 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -26,6 +31,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fun setupToolbar() {
+            setSupportActionBar(binding.bottomAppBar)
+            val toolbar: MaterialToolbar = binding.bottomAppBar;
+            setSupportActionBar(toolbar)
+            toolbar.title = "Qr Code Generator"
+        }
+        setupToolbar()
 
         binding.generateButton.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
@@ -46,6 +59,33 @@ class MainActivity : AppCompatActivity() {
             binding.qrCodeImage.setImageResource(android.R.color.transparent);
         }
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bottom_app_bar_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val transaction = supportFragmentManager.beginTransaction()
+        return when (item.itemId) {
+            R.id.home -> {
+                val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+                if (fragment != null) {
+                    transaction.remove(fragment).commit()
+                }
+                true
+            }
+            R.id.gallery -> {
+                val fragment = SavedQrCodesFragment()
+                transaction.replace(R.id.fragment_container_view, fragment).commit()
+                true
+            }
+            R.id.sign_out -> {
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun generateQrCode() {
        val inputText = binding.inputField.text.toString()
         try {
