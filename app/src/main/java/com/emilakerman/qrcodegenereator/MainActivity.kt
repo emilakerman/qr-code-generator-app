@@ -8,6 +8,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
@@ -36,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.saveProgressbar.visibility = View.GONE
+        binding.generateProgressbar.visibility = View.GONE
 
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -54,7 +58,17 @@ class MainActivity : AppCompatActivity() {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
             } else {
-                generateQrCode()
+                binding.generateProgressbar.visibility = View.VISIBLE
+                binding.generateButton.text = ""
+                generateQrCode().also {
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            binding.generateProgressbar.visibility = View.GONE
+                            binding.generateButton.text = "Generate"
+                        },
+                        1000
+                    )
+                }
                 it.hideKeyboard()
             }
         }
@@ -62,7 +76,19 @@ class MainActivity : AppCompatActivity() {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
             } else {
-                saveMediaToStorage(binding.qrCodeImage.drawToBitmap())
+                binding.saveProgressbar.visibility = View.VISIBLE
+                binding.saveButton.text = ""
+                saveMediaToStorage(binding.qrCodeImage.drawToBitmap()).also {
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            binding.saveProgressbar.visibility = View.GONE
+                            binding.saveButton.text = "Save"
+                        },
+                        1000
+                    )
+
+
+                }
             }
         }
         binding.clearButton.setOnClickListener {
