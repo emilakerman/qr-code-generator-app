@@ -28,10 +28,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.generateButton.setOnClickListener {
-            generateQrCode()
+            if (binding.inputField.text.toString() == "") {
+                return@setOnClickListener;
+            } else {
+                generateQrCode()
+            }
         }
         binding.saveButton.setOnClickListener {
-            saveMediaToStorage(binding.qrCodeImage.drawToBitmap())
+            if (binding.inputField.text.toString() == "") {
+                return@setOnClickListener;
+            } else {
+                saveMediaToStorage(binding.qrCodeImage.drawToBitmap())
+            }
         }
         binding.clearButton.setOnClickListener {
             binding.inputField.text?.clear();
