@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.clearButton.setOnClickListener {
             binding.inputField.text?.clear();
+            binding.qrCodeImage.setImageResource(android.R.color.transparent);
         }
     }
     private fun generateQrCode() {
