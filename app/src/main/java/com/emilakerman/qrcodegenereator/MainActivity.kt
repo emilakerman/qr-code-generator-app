@@ -1,6 +1,5 @@
 package com.emilakerman.qrcodegenereator
 
-import android.R.attr.bitmap
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.net.Uri
@@ -27,13 +26,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        /*var bitMap = binding.qrCodeImage.drawToBitmap();*/
 
         binding.generateButton.setOnClickListener {
             generateQrCode()
         }
         binding.saveButton.setOnClickListener {
             saveMediaToStorage(binding.qrCodeImage.drawToBitmap())
+        }
+        binding.clearButton.setOnClickListener {
+            binding.inputField.text?.clear();
         }
     }
     private fun generateQrCode() {
@@ -46,17 +47,15 @@ class MainActivity : AppCompatActivity() {
             println(e);
         }
     }
-    fun saveMediaToStorage(bitmap: Bitmap) {
+    private fun saveMediaToStorage(bitmap: Bitmap) {
         val filename = "${System.currentTimeMillis()}.jpg"
         var fos: OutputStream? = null
         //For devices running android >= Q
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             //getting the contentResolver
             contentResolver?.also { resolver ->
-
                 //Content resolver will process the contentvalues
                 val contentValues = ContentValues().apply {
-
                     //putting file information in content values
                     put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                 //Inserting the contentValues to contentResolver and getting the Uri
                 val imageUri: Uri? =
                     resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
                 //Opening an outputstream with the Uri that we got
                 fos = imageUri?.let { resolver.openOutputStream(it) }
             }
