@@ -61,9 +61,11 @@ class MainActivity : AppCompatActivity() {
                 binding.generateProgressbar.visibility = View.VISIBLE
                 binding.generateButton.text = ""
                 generateQrCode().also {
+                    // Adding a type of delay to simulate a loading state.
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             binding.generateProgressbar.visibility = View.GONE
+                            // TODO: Fix hardcoded string.
                             binding.generateButton.text = "Generate"
                         },
                         1000
@@ -79,9 +81,11 @@ class MainActivity : AppCompatActivity() {
                 binding.saveProgressbar.visibility = View.VISIBLE
                 binding.saveButton.text = ""
                 saveMediaToStorage(binding.qrCodeImage.drawToBitmap()).also {
+                    // Adding a type of delay to simulate a loading state.
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             binding.saveProgressbar.visibility = View.GONE
+                            // TODO: Fix hardcoded string.
                             binding.saveButton.text = "Save"
                         },
                         1000
@@ -116,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.sign_out -> {
+                // TODO: Implement sign out feature.
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
                 true
             }
