@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun setupToolbar() {
-            setSupportActionBar(binding.bottomAppBar)
             val toolbar: MaterialToolbar = binding.bottomAppBar;
+            setSupportActionBar(binding.bottomAppBar)
             setSupportActionBar(toolbar)
             toolbar.title = ""
         }
