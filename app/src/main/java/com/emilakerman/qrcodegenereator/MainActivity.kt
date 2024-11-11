@@ -1,6 +1,5 @@
 package com.emilakerman.qrcodegenereator
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
@@ -16,11 +15,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.drawToBitmap
-import androidx.fragment.app.Fragment
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.zxing.BarcodeFormat
@@ -33,7 +29,6 @@ import java.io.OutputStream
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -115,7 +110,8 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
-                val fragment = SavedQrCodesFragment()
+                // Change integer to be the count of how many qr codes have been saved.
+                val fragment = SavedQrCodesFragment.newInstance(1)
                 transaction.replace(R.id.fragment_container_view, fragment).commit()
                 true
             }
