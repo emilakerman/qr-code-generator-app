@@ -25,6 +25,11 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -90,11 +95,73 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.saveToCloud.setOnClickListener {
+            if (binding.inputField.text.toString() == "") {
+                return@setOnClickListener;
+            } else {
+                // save to cloud/vercel
+                uploadImage(binding.qrCodeImage.drawToBitmap());
+            }
+        }
         binding.clearButton.setOnClickListener {
             binding.inputField.text?.clear();
             binding.qrCodeImage.setImageResource(android.R.color.transparent);
         }
     }
+    private val client = OkHttpClient()
+
+    // Convert the Bitmap to a ByteArray
+    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream) // You can change PNG to JPEG if you prefer
+        return outputStream.toByteArray()
+    }
+
+    // In your ViewModel or non-UI class:
+    private fun uploadImage(bitmap: Bitmap) {
+        // Convert Bitmap to byte array
+        val byteArray = bitmapToByteArray(bitmap)
+
+        // Create a temporary file from the byte array
+        val file = File.createTempFile("image", ".png")
+        file.writeBytes(byteArray)
+
+        // Build the multipart request body
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "file", file.name, file.asRequestBody("image/png".toMediaTypeOrNull())
+            )
+            .build()
+
+        // Create the request
+        val request = Request.Builder()
+            .url("http://10.0.2.2:3000/putQR") // Use 10.0.2.2 for emulator
+            .put(requestBody)
+            .addHeader("Authorization", "Bearer A1k9BBMA5X1Gk8MuGDUHeLEV")
+            .build()
+
+        // Send the request
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Request failed with exception: ${e.message}")
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    println("Upload successful: ${response.body?.string()}")
+                } else {
+                    println("Upload failed with status code: ${response.code}")
+                    println("Error details: ${response.body?.string()}")
+                }
+            }
+        })
+    }
+
+
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.bottom_app_bar_menu, menu)
         return true
