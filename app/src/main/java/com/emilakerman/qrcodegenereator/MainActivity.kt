@@ -2,6 +2,7 @@ package com.emilakerman.qrcodegenereator
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -34,6 +37,8 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     // Convert the Bitmap to a ByteArray
-    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+    private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream) // You can change PNG to JPEG if you prefer
         return outputStream.toByteArray()
@@ -138,10 +143,12 @@ class MainActivity : AppCompatActivity() {
 
         // Create the request
         val request = Request.Builder()
-            //TODO: Change to we use the real url and not local one.
+            //NOTE: This works now but I turned off auth protection.
             .url("${keys.localHost}putQR")
+            //TODO: Change value to UUID (directory in vercel blob).
+            .addHeader("user", "123")
             .put(requestBody)
-            .addHeader("Authorization", "Bearer ${keys.vercel_key}")
+            /*.addHeader("Authorization", "Bearer ${keys.vercel_key}")*/
             .build()
 
         // Send the request
@@ -187,6 +194,11 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.sign_out -> {
                 // TODO: Implement sign out feature.
+                auth = FirebaseAuth.getInstance();
+                auth.signOut().also {
+                    val intent = Intent(this, EmailPasswordActivity::class.java)
+                    startActivity(intent)
+                }
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
                 true
             }

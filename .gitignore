@@ -16,3 +16,4 @@ local.properties
 Keys.java
 ApiKeys.kt
 app/src/main/java/com/emilakerman/qrcodegenereator/ApiKeys.kt
+app/google-services.json
