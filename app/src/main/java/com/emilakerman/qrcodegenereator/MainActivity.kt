@@ -147,10 +147,8 @@ class MainActivity : AppCompatActivity() {
         val request = Request.Builder()
             //NOTE: This works now but I turned off auth protection.
             .url("${keys.localHost}putQR")
-            //TODO: Change value to UUID (directory in vercel blob).
             .addHeader("user", auth.currentUser?.uid.toString())
             .put(requestBody)
-            /*.addHeader("Authorization", "Bearer ${keys.vercel_key}")*/
             .build()
 
         // Send the request

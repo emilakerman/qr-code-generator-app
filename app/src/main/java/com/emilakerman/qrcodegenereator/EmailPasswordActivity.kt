@@ -23,7 +23,6 @@ class EmailPasswordActivity : AppCompatActivity() {
         binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
-        //val user = FirebaseAuth.getInstance().currentUser
         binding.signInButton.setOnClickListener {
             if (binding.editTextTextEmailAddress.text.toString() == "") {
                 return@setOnClickListener;
