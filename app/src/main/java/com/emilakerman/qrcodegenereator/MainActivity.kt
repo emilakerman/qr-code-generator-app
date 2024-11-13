@@ -134,11 +134,14 @@ class MainActivity : AppCompatActivity() {
             )
             .build()
 
+        val keys = Keys();
+
         // Create the request
         val request = Request.Builder()
+            //TODO: Change to we use the real url and not local one.
             .url("http://10.0.2.2:3000/putQR") // Use 10.0.2.2 for emulator
             .put(requestBody)
-            .addHeader("Authorization", "Bearer A1k9BBMA5X1Gk8MuGDUHeLEV")
+            .addHeader("Authorization", "Bearer ${keys.vercel_key}")
             .build()
 
         // Send the request
