@@ -54,5 +54,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.gms:google-services:4.4.2")
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("io.coil-kt:coil:2.0.0")
 
 }
