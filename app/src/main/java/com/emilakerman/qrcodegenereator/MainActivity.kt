@@ -193,7 +193,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.sign_out -> {
-                // TODO: Implement sign out feature.
                 auth = FirebaseAuth.getInstance();
                 auth.signOut().also {
                     val intent = Intent(this, EmailPasswordActivity::class.java)
