@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, EmailPasswordActivity::class.java)
                     startActivity(intent)
                 }
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
