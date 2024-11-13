@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         binding.saveProgressbar.visibility = View.GONE
         binding.generateProgressbar.visibility = View.GONE
         auth = FirebaseAuth.getInstance();
-
-
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(windowToken, 0)
@@ -123,9 +121,35 @@ class MainActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream) // You can change PNG to JPEG if you prefer
         return outputStream.toByteArray()
     }
+    // Get amount of images to pass as argument to fragment.
+    private fun getImagesCount(callback: (Int) -> Unit) {
+        val keys = ApiKeys()
+        val request = Request.Builder()
+            .url("${keys.localHost}getQRCount")
+            .addHeader("user", auth.currentUser?.uid.toString())
+            .build()
 
-    // In your ViewModel or non-UI class:
-    private fun uploadImage(bitmap: Bitmap) {
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Request failed with exception: ${e.message}")
+                callback(0)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                val listLength: Int? = responseBody?.toIntOrNull()
+
+                if (listLength != null) {
+                    callback(listLength)
+                } else {
+                    println("Failed to parse the list length as an integer.")
+                    callback(0)
+                }
+            }
+        })
+    }
+
+    private fun uploadImage(bitmap: Bitmap)  {
         // Convert Bitmap to byte array
         val byteArray = bitmapToByteArray(bitmap)
 
@@ -146,7 +170,7 @@ class MainActivity : AppCompatActivity() {
         // Create the request
         val request = Request.Builder()
             //NOTE: This works now but I turned off auth protection.
-            .url("${keys.localHost}putQR")
+            .url("${keys.baseUrl}putQR")
             .addHeader("user", auth.currentUser?.uid.toString())
             .put(requestBody)
             .build()
@@ -187,9 +211,11 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
-                // Change integer to be the count of how many qr codes have been saved.
-                val fragment = SavedQrCodesFragment.newInstance(1)
-                transaction.replace(R.id.fragment_container_view, fragment).commit()
+                // Changes integer to be the count of how many qr codes have been saved.
+                getImagesCount { count ->
+                    val fragment = SavedQrCodesFragment.newInstance(count)
+                    transaction.replace(R.id.fragment_container_view, fragment).commit()
+                }
                 true
             }
             R.id.sign_out -> {
