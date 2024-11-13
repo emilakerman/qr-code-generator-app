@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.saveProgressbar.visibility = View.GONE
         binding.generateProgressbar.visibility = View.GONE
+        auth = FirebaseAuth.getInstance();
+
 
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -146,7 +148,7 @@ class MainActivity : AppCompatActivity() {
             //NOTE: This works now but I turned off auth protection.
             .url("${keys.localHost}putQR")
             //TODO: Change value to UUID (directory in vercel blob).
-            .addHeader("user", "123")
+            .addHeader("user", auth.currentUser?.uid.toString())
             .put(requestBody)
             /*.addHeader("Authorization", "Bearer ${keys.vercel_key}")*/
             .build()
