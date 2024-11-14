@@ -162,6 +162,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    // TODO: Add Toast For Success/Failure.
     private fun uploadImage(bitmap: Bitmap)  {
         // Convert Bitmap to byte array
         val byteArray = bitmapToByteArray(bitmap)

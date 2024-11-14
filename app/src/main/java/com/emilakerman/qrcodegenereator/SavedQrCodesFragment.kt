@@ -1,20 +1,17 @@
 package com.emilakerman.qrcodegenereator
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
@@ -22,7 +19,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
-import java.net.URL
 import coil.load
 import kotlinx.coroutines.delay
 
@@ -31,9 +27,9 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
+    private val client = OkHttpClient()
 
-
-
+    // Receives the data passed to the fragment.
     companion object {
         private const val passedCount = "passedCount"
         fun newInstance(exampleParam: Int): SavedQrCodesFragment {
@@ -44,9 +40,9 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
             return fragment
         }
     }
-
-    private val client = OkHttpClient()
-
+    // This method fetches the QR codes for the logged in user.
+    // The Request is sent to the Node.js server hosted on Vercel.
+    // Node.js fetches the blobs/images from Vercel Blob Storage.
     private suspend fun getImages(): List<String> {
         var urls: List<String> = listOf<String>();
         auth = FirebaseAuth.getInstance();
@@ -63,16 +59,11 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
-
                 if (responseBody != null) {
-                    println("Success!!: $responseBody")
                     val gson = Gson()
                     val listType = object : TypeToken<List<String>>() {}.type
                     val blobFileList: List<String> = gson.fromJson(responseBody, listType)
                     urls = blobFileList;
-                    blobFileList.forEach {
-                        println("emil url:" + it)
-                    }
                 } else {
                     println("Failed to parse the list length as an integer.")
                 }
@@ -95,11 +86,10 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val container = binding.imageContainer
         val qrCodeCount = arguments?.getInt(passedCount)
-
         if (qrCodeCount != null) {
             lifecycleScope.launch {
                 val images = getImages()
-                // Dynamically add ImageViews with loaded images
+                // This adds ImageViews dynamically with asynchronous images.
                 repeat(qrCodeCount) { index ->
                     val imageUrl = images.getOrNull(index)
                     if (imageUrl != null) {
@@ -128,5 +118,4 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         super.onDestroyView()
         _binding = null // Avoid memory leaks
     }
-
 }
