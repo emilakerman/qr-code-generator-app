@@ -141,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
+                // TODO: Test if I can pass the URLs here instead.
                 // Passes the "count" of how many qr codes a user has saved in the cloud to the fragment.
                 qrRepository.getImagesCount { count ->
                     val fragment = SavedQrCodesFragment.newInstance(count)

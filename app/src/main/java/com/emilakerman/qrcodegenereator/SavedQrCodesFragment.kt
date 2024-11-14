@@ -7,22 +7,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
 import coil.load
-import kotlinx.coroutines.delay
 
 
 class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
@@ -54,10 +43,13 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val container = binding.imageContainer
+        val progressBar = binding.progressBar
         val qrCodeCount = arguments?.getInt(passedCount)
         if (qrCodeCount != null) {
+            progressBar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 val images = qrRepository.getImages()
+                progressBar.visibility = View.GONE
                 // This adds ImageViews and Buttons dynamically with asynchronous images.
                 repeat(qrCodeCount) { index ->
                     val imageUrl = images.getOrNull(index)
