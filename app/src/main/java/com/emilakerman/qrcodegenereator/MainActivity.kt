@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.saveProgressbar.visibility = View.GONE
         binding.generateProgressbar.visibility = View.GONE
+        binding.saveToCloudProgressbar.visibility = View.GONE
         auth = FirebaseAuth.getInstance();
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -105,7 +106,19 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener;
             } else {
                 // save to cloud/vercel
-                uploadImage(binding.qrCodeImage.drawToBitmap());
+                binding.saveToCloudProgressbar.visibility = View.VISIBLE
+                binding.saveToCloud.text = ""
+                uploadImage(binding.qrCodeImage.drawToBitmap()).also {
+                    // Adding a type of delay to simulate a loading state.
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            binding.saveToCloudProgressbar.visibility = View.GONE
+                            // TODO: Fix hardcoded string.
+                            binding.saveToCloud.text = "Save to cloud"
+                        },
+                        1000
+                    )
+                }
             }
         }
         binding.clearButton.setOnClickListener {
@@ -190,6 +203,7 @@ class MainActivity : AppCompatActivity() {
                     println("Error details: ${response.body?.string()}")
                 }
             }
+
         })
     }
 
