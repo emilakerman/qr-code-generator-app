@@ -28,8 +28,7 @@ import kotlinx.coroutines.delay
 class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
-    private val client = OkHttpClient()
+    private val qrRepository = QrRepository();
 
     // Receives the data passed to the fragment.
     companion object {
@@ -41,38 +40,6 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
             fragment.arguments = args
             return fragment
         }
-    }
-    // This method fetches the QR codes for the logged in user.
-    // The Request is sent to the Node.js server hosted on Vercel.
-    // Node.js fetches the blobs/images from Vercel Blob Storage.
-    private suspend fun getImages(): List<String> {
-        var urls: List<String> = listOf<String>();
-        auth = FirebaseAuth.getInstance();
-        val keys = ApiKeys()
-        val request = Request.Builder()
-            .url("${keys.baseUrl}getQRCodes")
-            .addHeader("user", auth.currentUser?.uid.toString())
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Request failed with exception: ${e.message}")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
-                if (responseBody != null) {
-                    val gson = Gson()
-                    val listType = object : TypeToken<List<String>>() {}.type
-                    val blobFileList: List<String> = gson.fromJson(responseBody, listType)
-                    urls = blobFileList;
-                } else {
-                    println("Failed to parse the list length as an integer.")
-                }
-            }
-        })
-        delay(1000)
-        return urls;
     }
 
     override fun onCreateView(
@@ -90,7 +57,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         val qrCodeCount = arguments?.getInt(passedCount)
         if (qrCodeCount != null) {
             lifecycleScope.launch {
-                val images = getImages()
+                val images = qrRepository.getImages()
                 // This adds ImageViews and Buttons dynamically with asynchronous images.
                 repeat(qrCodeCount) { index ->
                     val imageUrl = images.getOrNull(index)

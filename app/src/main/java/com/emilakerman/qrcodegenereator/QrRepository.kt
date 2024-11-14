@@ -2,6 +2,9 @@ package com.emilakerman.qrcodegenereator
 
 import android.graphics.Bitmap
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.delay
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -91,5 +94,37 @@ class QrRepository {
                 }
             }
         })
+    }
+    // This method fetches the QR codes for the logged in user.
+    // The Request is sent to the Node.js server hosted on Vercel.
+    // Node.js fetches the blobs/images from Vercel Blob Storage.
+    suspend fun getImages(): List<String> {
+        var urls: List<String> = listOf<String>();
+        auth = FirebaseAuth.getInstance();
+        val keys = ApiKeys()
+        val request = Request.Builder()
+            .url("${keys.baseUrl}getQRCodes")
+            .addHeader("user", auth.currentUser?.uid.toString())
+            .build()
+
+        _client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Request failed with exception: ${e.message}")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (responseBody != null) {
+                    val gson = Gson()
+                    val listType = object : TypeToken<List<String>>() {}.type
+                    val blobFileList: List<String> = gson.fromJson(responseBody, listType)
+                    urls = blobFileList;
+                } else {
+                    println("Failed to parse the list length as an integer.")
+                }
+            }
+        })
+        delay(1000)
+        return urls;
     }
 }
