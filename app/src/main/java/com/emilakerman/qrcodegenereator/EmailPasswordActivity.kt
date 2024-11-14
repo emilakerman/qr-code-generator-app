@@ -1,17 +1,12 @@
 package com.emilakerman.qrcodegenereator
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.emilakerman.qrcodegenereator.databinding.ActivityEmailPasswordBinding
-import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
-import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.initialize
 
 class EmailPasswordActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -23,29 +18,31 @@ class EmailPasswordActivity : AppCompatActivity() {
         binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
+        val emailField = binding.editTextTextEmailAddress.text.toString();
+        val passwordField = binding.editTextTextPassword.text.toString();
         binding.signInButton.setOnClickListener {
-            if (binding.editTextTextEmailAddress.text.toString() == "") {
+            if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
-            signInUser(binding.editTextTextEmailAddress.text.toString(),
-                binding.editTextTextPassword.text.toString());
+                signInUser(emailField, passwordField);
             }
         }
         binding.signUpButton.setOnClickListener {
-            if (binding.editTextTextEmailAddress.text.toString() == "") {
+            if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
-                createUser(
-                    binding.editTextTextEmailAddress.text.toString(),
-                    binding.editTextTextPassword.text.toString()
-                );
+                createUser(emailField, passwordField);
             }
         }
     }
+        // Reusable function that checks if either password or email fields are empty.
+        private fun fieldsEmpty(): Boolean {
+            return binding.editTextTextEmailAddress.text.toString().isEmpty() || binding.editTextTextPassword.text.toString().isEmpty()
+        }
 
         public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in (non-null) and redirects user to mainactivity.
         if (auth.currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -63,7 +60,6 @@ class EmailPasswordActivity : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    /*updateUI(null)*/
                 }
             }
     }
