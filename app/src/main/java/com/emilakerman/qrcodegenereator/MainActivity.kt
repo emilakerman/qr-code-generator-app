@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
-                // Changes integer to be the count of how many qr codes have been saved.
+                // Passes the "count" of how many qr codes a user has saved in the cloud to the fragment.
                 getImagesCount { count ->
                     val fragment = SavedQrCodesFragment.newInstance(count)
                     transaction.replace(R.id.fragment_container_view, fragment).commit()

@@ -18,29 +18,27 @@ class EmailPasswordActivity : AppCompatActivity() {
         binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
-        val emailField = binding.editTextTextEmailAddress.text.toString();
-        val passwordField = binding.editTextTextPassword.text.toString();
         binding.signInButton.setOnClickListener {
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
-                signInUser(emailField, passwordField);
+                signInUser(binding.editTextTextEmailAddress.text.toString(), binding.editTextTextPassword.text.toString());
             }
         }
         binding.signUpButton.setOnClickListener {
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
-                createUser(emailField, passwordField);
+                createUser(binding.editTextTextEmailAddress.text.toString(), binding.editTextTextPassword.text.toString());
             }
         }
     }
-        // Reusable function that checks if either password or email fields are empty.
-        private fun fieldsEmpty(): Boolean {
-            return binding.editTextTextEmailAddress.text.toString().isEmpty() || binding.editTextTextPassword.text.toString().isEmpty()
-        }
+    // Reusable function that checks if either password or email fields are empty.
+    private fun fieldsEmpty(): Boolean {
+        return binding.editTextTextEmailAddress.text.toString().isEmpty() || binding.editTextTextPassword.text.toString().isEmpty()
+    }
 
-        public override fun onStart() {
+    public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and redirects user to mainactivity.
         if (auth.currentUser != null) {
