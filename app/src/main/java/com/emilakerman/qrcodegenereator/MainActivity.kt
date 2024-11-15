@@ -66,6 +66,13 @@ class MainActivity : AppCompatActivity() {
             toolbar.title = ""
         }
         setupToolbar()
+/*
+        binding.saveToCloud.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.outline_cloud_upload_24, // Start drawable
+            0,
+            0,                               // End drawable
+            0                                // Bottom drawable
+        )*/
 
         binding.inputField.addTextChangedListener {
             binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
@@ -96,14 +103,13 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener;
             } else {
                 binding.saveProgressbar.visibility = View.VISIBLE
-                binding.saveButton.text = ""
+                binding.saveButton.visibility = View.GONE
                 imageHelper.saveMediaToStorage(binding.qrCodeImage.drawToBitmap(), context = this).also {
                     // Adding a type of delay to simulate a loading state.
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             binding.saveProgressbar.visibility = View.GONE
-                            // TODO: Fix hardcoded string.
-                            binding.saveButton.text = "Save to device"
+                            binding.saveButton.visibility = View.VISIBLE
                         },
                         1000
                     )
@@ -116,14 +122,13 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // save to cloud/vercel
                 binding.saveToCloudProgressbar.visibility = View.VISIBLE
-                binding.saveToCloud.text = ""
+                binding.saveToCloud.visibility = View.GONE
                 qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap()).also {
                     // Adding a type of delay to simulate a loading state.
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             binding.saveToCloudProgressbar.visibility = View.GONE
-                            // TODO: Fix hardcoded string.
-                            binding.saveToCloud.text = "Save to cloud"
+                            binding.saveToCloud.visibility = View.VISIBLE
                         },
                         1000
                     )

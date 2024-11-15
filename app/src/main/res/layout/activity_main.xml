@@ -45,27 +45,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        &lt;!&ndash;<com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/bottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="#8B8B4B98"
-            android:translationZ="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_app_bar_menu" />&ndash;&gt;
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
--->
-
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
         android:layout_width="0dp"
@@ -74,54 +53,92 @@
         android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/generateButton"
-        android:layout_width="280dp"
+        android:layout_width="165dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="90dp"
         android:text="Generate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/darkConstraint" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save to device"
-        app:layout_constraintStart_toStartOf="@+id/generateButton"
-        app:layout_constraintTop_toBottomOf="@+id/generateButton" />
 
-    <Button
-        android:id="@+id/saveToCloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save to cloud"
-        app:layout_constraintEnd_toEndOf="@+id/generateButton"
-        app:layout_constraintTop_toBottomOf="@+id/generateButton" />
+    <LinearLayout
+        android:layout_width="91dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/generateProgressbar"
+        app:layout_constraintStart_toEndOf="@+id/generateButton"
+        app:layout_constraintTop_toTopOf="@+id/generateProgressbar">
 
-    <ProgressBar
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-        android:id="@+id/saveProgressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:indeterminate="false"
-        android:indeterminateTint="#FFFFFF"
-        android:progressBackgroundTint="#FFFFFF"
-        android:progressBackgroundTintMode="add"
-        android:progressTint="#FFFFFF"
-        android:secondaryProgressTint="#FFFFFF"
-        android:secondaryProgressTintMode="src_atop"
-        app:layout_constraintBottom_toBottomOf="@+id/saveButton"
-        app:layout_constraintEnd_toEndOf="@+id/saveButton"
-        app:layout_constraintStart_toStartOf="@+id/saveButton"
-        app:layout_constraintTop_toTopOf="@+id/saveButton" />
+            <ProgressBar
+
+                android:id="@+id/saveProgressbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyle"
+                android:indeterminate="false"
+                android:indeterminateTint="#FFFFFF"
+                android:progressBackgroundTint="#FFFFFF"
+                android:progressBackgroundTintMode="add"
+                android:progressTint="#FFFFFF"
+                android:secondaryProgressTint="#FFFFFF"
+                android:paddingRight="10dp"
+                android:secondaryProgressTintMode="src_atop"
+                />
+
+            <ImageButton
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingRight="10dp"
+                android:src="@android:drawable/stat_sys_download" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/saveToCloudProgressbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyle"
+                android:indeterminate="false"
+                android:indeterminateTint="#FFFFFF"
+                android:progressBackgroundTint="#FFFFFF"
+                android:progressBackgroundTintMode="add"
+                android:progressTint="#FFFFFF"
+                android:paddingRight="10dp"
+                android:secondaryProgressTint="#FFFFFF"
+                android:secondaryProgressTintMode="src_atop"
+                />
+
+            <ImageButton
+                android:id="@+id/saveToCloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/outline_cloud_upload_24" />
+        </FrameLayout>
+    </LinearLayout>
+
+
+
 
     <ProgressBar
 
@@ -141,23 +158,7 @@
         app:layout_constraintStart_toStartOf="@+id/generateButton"
         app:layout_constraintTop_toTopOf="@+id/generateButton" />
 
-    <ProgressBar
 
-        android:id="@+id/saveToCloudProgressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:indeterminate="false"
-        android:indeterminateTint="#FFFFFF"
-        android:progressBackgroundTint="#FFFFFF"
-        android:progressBackgroundTintMode="add"
-        android:progressTint="#FFFFFF"
-        android:secondaryProgressTint="#FFFFFF"
-        android:secondaryProgressTintMode="src_atop"
-        app:layout_constraintBottom_toBottomOf="@+id/saveToCloud"
-        app:layout_constraintEnd_toEndOf="@+id/saveToCloud"
-        app:layout_constraintStart_toStartOf="@+id/saveToCloud"
-        app:layout_constraintTop_toTopOf="@+id/saveToCloud" />
 
     <ImageView
         android:id="@+id/qrCodeImage"
@@ -188,11 +189,11 @@
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveButton">
+        app:layout_constraintTop_toBottomOf="@+id/generateButton">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputField"
