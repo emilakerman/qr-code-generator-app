@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
@@ -18,6 +19,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
     private val qrRepository = QrRepository();
+    private val imageHelper = ImageHelper();
 
     // Receives the data passed to the fragment.
     companion object {
@@ -86,9 +88,16 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                             // TODO: Change hardcoded text.
                             text = "Download"
                             setOnClickListener {
-                                // Handle button click here
+                                val imageUrl = images[index]
+                                if (imageUrl.isNullOrEmpty()) {
+                                    Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
+                                    return@setOnClickListener
+                                }
 
+                                // Use requireContext() to pass a valid Context
+                                imageHelper.saveImageFromUrl(requireContext(), imageUrl)
                             }
+
                         }
                         // TODO: This is probably not a good way to do this.
                         button.translationX = 200F;

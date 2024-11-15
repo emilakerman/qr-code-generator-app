@@ -3,11 +3,14 @@ package com.emilakerman.qrcodegenereator
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -15,6 +18,9 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.transition.Transition
+
 class ImageHelper {
 
     // Generates a QR code and displays in the binding.
@@ -28,7 +34,22 @@ class ImageHelper {
             println(e);
         }
     }
-    // Saves QR code to local storage.
+    // Downloads QR Code from URL.
+    fun saveImageFromUrl(context: Context, imageUrl: String) {
+        Glide.with(context)
+            .asBitmap()
+            .load(imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    saveMediaToStorage(resource, context)
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+            })
+    }
+
+    // Saves bitmap QR code to local storage.
     fun saveMediaToStorage(bitmap: Bitmap, context: Context) {
         val filename = "${System.currentTimeMillis()}.jpg"
         var fos: OutputStream? = null
@@ -59,3 +80,4 @@ class ImageHelper {
         }
     }
 }
+

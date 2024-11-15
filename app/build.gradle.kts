@@ -56,5 +56,6 @@ dependencies {
     implementation("com.google.gms:google-services:4.4.2")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("io.coil-kt:coil:2.0.0")
-
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 }
