@@ -1,5 +1,7 @@
 package com.emilakerman.qrcodegenereator
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -11,6 +13,8 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.TypedValue
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +22,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
+import androidx.core.widget.addTextChangedListener
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
@@ -62,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         }
         setupToolbar()
 
+        binding.inputField.addTextChangedListener {
+            binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+        }
+
         binding.generateButton.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
@@ -94,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                         {
                             binding.saveProgressbar.visibility = View.GONE
                             // TODO: Fix hardcoded string.
-                            binding.saveButton.text = "Save"
+                            binding.saveButton.text = "Save to device"
                         },
                         1000
                     )
@@ -121,10 +130,35 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        //
         binding.clearButton.setOnClickListener {
-            binding.inputField.text?.clear();
-            binding.qrCodeImage.setImageResource(android.R.color.transparent);
+            if (binding.inputField.text?.isEmpty() == true) {
+                binding.inputField.setText(pasteFromClipboard(this).toString());
+            } else {
+                binding.inputField.text?.clear();
+                binding.qrCodeImage.setImageResource(android.R.color.transparent);
+                val typedValue = TypedValue()
+                val theme = this.theme
+                if (theme.resolveAttribute(android.R.attr.actionModePasteDrawable, typedValue, true)) {
+                    val pasteDrawableResId = typedValue.resourceId
+                    binding.clearButton.setImageResource(pasteDrawableResId)
+                }
+            }
         }
+    }
+     fun pasteFromClipboard(context: Context): String? {
+        // Get the ClipboardManager
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        // Check if there is any data in the clipboard
+        if (clipboard.hasPrimaryClip() && clipboard.primaryClip != null) {
+            val clipData: ClipData = clipboard.primaryClip!!
+            // Get the first item from the clip data
+            val item = clipData.getItemAt(0)
+            // Return the text if available
+            return item.text?.toString()
+        }
+        return null
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.bottom_app_bar_menu, menu)

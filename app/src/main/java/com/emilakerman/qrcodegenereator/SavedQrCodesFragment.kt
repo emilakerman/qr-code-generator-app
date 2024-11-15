@@ -90,6 +90,8 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
 
                             }
                         }
+                        // TODO: This is probably not a good way to do this.
+                        button.translationX = 200F;
 
                         // Add ImageView and Button to the item layout
                         itemLayout.addView(imageView)
@@ -102,9 +104,9 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
             }
         }
     }
-
+    // Avoid memory leaks
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Avoid memory leaks
+        _binding = null
     }
 }
