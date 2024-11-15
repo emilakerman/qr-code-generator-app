@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#D8015C92"
     android:translationZ="1dp"
-    android:background="#8B8B4B98"
     tools:context=".MainActivity">
 
 
@@ -14,13 +14,15 @@
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8B8B4B98"
+        android:background="#015c92"
         android:fitsSystemWindows="true"
         android:translationZ="2dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_app_bar_menu" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/bottom_app_bar_menu"
+        app:subtitleTextColor="#FFFFFF"
+        app:titleTextColor="#FFFFFF" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/darkConstraint"
@@ -64,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="90dp"
+        android:backgroundTint="#015c92"
         android:text="Generate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,19 +89,18 @@
             <ProgressBar
 
                 android:id="@+id/saveProgressbar"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:visibility="gone"
-                style="?android:attr/progressBarStyle"
                 android:indeterminate="false"
                 android:indeterminateTint="#FFFFFF"
+                android:paddingRight="10dp"
                 android:progressBackgroundTint="#FFFFFF"
                 android:progressBackgroundTintMode="add"
                 android:progressTint="#FFFFFF"
                 android:secondaryProgressTint="#FFFFFF"
-                android:paddingRight="10dp"
                 android:secondaryProgressTintMode="src_atop"
-                />
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/saveButton"
@@ -108,25 +110,25 @@
                 android:paddingRight="10dp"
                 android:src="@android:drawable/stat_sys_download" />
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
             <ProgressBar
                 android:id="@+id/saveToCloudProgressbar"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:visibility="gone"
-                style="?android:attr/progressBarStyle"
                 android:indeterminate="false"
                 android:indeterminateTint="#FFFFFF"
+                android:paddingRight="10dp"
                 android:progressBackgroundTint="#FFFFFF"
                 android:progressBackgroundTintMode="add"
                 android:progressTint="#FFFFFF"
-                android:paddingRight="10dp"
                 android:secondaryProgressTint="#FFFFFF"
                 android:secondaryProgressTintMode="src_atop"
-                />
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/saveToCloud"
@@ -136,8 +138,6 @@
                 android:src="@drawable/outline_cloud_upload_24" />
         </FrameLayout>
     </LinearLayout>
-
-
 
 
     <ProgressBar
@@ -157,7 +157,6 @@
         app:layout_constraintEnd_toEndOf="@+id/generateButton"
         app:layout_constraintStart_toStartOf="@+id/generateButton"
         app:layout_constraintTop_toTopOf="@+id/generateButton" />
-
 
 
     <ImageView

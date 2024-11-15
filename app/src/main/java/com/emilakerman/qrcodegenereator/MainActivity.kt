@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-     fun pasteFromClipboard(context: Context): String? {
+     private fun pasteFromClipboard(context: Context): String? {
         // Get the ClipboardManager
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
