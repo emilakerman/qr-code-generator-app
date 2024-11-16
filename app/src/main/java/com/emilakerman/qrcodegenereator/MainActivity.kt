@@ -2,19 +2,12 @@ package com.emilakerman.qrcodegenereator
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,19 +19,6 @@ import androidx.core.widget.addTextChangedListener
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.IOException
-import java.io.ByteArrayOutputStream
-
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
@@ -66,14 +46,6 @@ class MainActivity : AppCompatActivity() {
             toolbar.title = ""
         }
         setupToolbar()
-/*
-        binding.saveToCloud.setCompoundDrawablesWithIntrinsicBounds(
-            R.drawable.outline_cloud_upload_24, // Start drawable
-            0,
-            0,                               // End drawable
-            0                                // Bottom drawable
-        )*/
-
         binding.inputField.addTextChangedListener {
             binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         }

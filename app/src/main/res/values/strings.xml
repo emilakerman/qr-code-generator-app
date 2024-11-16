@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">qr code genereator</string>
+    <string name="app_name">QR Code Generator</string>
+    <string name="signed_out">Signed out!</string>
+    <string name="download">Download</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="home">Home</string>
+    <string name="saved_qr_codes">Saved QR Codes</string>
+    <string name="sign_out">Sign out</string>
+    <string name="paste_url">Paste url...</string>
+    <string name="generate">Generate</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="generate_qr_codes">Generate QR Codes</string>
+    <string name="quick_easy_free">Quick, Easy, Free</string>
 </resources>

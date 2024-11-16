@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:text="Qr Code Generator"
+            android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
         android:layout_marginTop="70dp"
         android:layout_marginEnd="90dp"
         android:backgroundTint="#015c92"
-        android:text="Generate"
+        android:text="@string/generate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/darkConstraint" />
@@ -201,7 +201,7 @@
             android:layout_marginHorizontal="77dp"
             android:layout_marginTop="5dp"
             android:background="#22292d"
-            android:hint="Paste url..."
+            android:hint="@string/paste_url"
             android:maxLines="1"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
