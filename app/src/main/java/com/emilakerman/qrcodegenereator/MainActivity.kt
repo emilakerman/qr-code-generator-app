@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
             } else {
-                // save to cloud/vercel
+                // Saves QR Code to cloud/vercel
                 binding.saveToCloudProgressbar.visibility = View.VISIBLE
                 binding.saveToCloud.visibility = View.GONE
                 qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap()).also {
@@ -135,7 +135,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        //
+        // Either clears the input field or pastes from clipboard.
+        // Depending on if the field is empty or not.
         binding.clearButton.setOnClickListener {
             if (binding.inputField.text?.isEmpty() == true) {
                 binding.inputField.setText(pasteFromClipboard(this).toString());
@@ -152,15 +153,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
      private fun pasteFromClipboard(context: Context): String? {
-        // Get the ClipboardManager
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-        // Check if there is any data in the clipboard
         if (clipboard.hasPrimaryClip() && clipboard.primaryClip != null) {
             val clipData: ClipData = clipboard.primaryClip!!
-            // Get the first item from the clip data
             val item = clipData.getItemAt(0)
-            // Return the text if available
             return item.text?.toString()
         }
         return null

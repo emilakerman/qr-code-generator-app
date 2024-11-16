@@ -14,7 +14,6 @@ import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
 import kotlinx.coroutines.launch
 import coil.load
 
-
 class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
