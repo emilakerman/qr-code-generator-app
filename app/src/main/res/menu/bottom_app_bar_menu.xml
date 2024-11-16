@@ -6,7 +6,7 @@
         android:icon="@drawable/baseline_home_24" />
     <item
         android:id="@+id/gallery"
-        android:title="Gallery"
+        android:title="Saved QR Codes"
         android:icon="@android:drawable/ic_menu_gallery" />
     <item
         android:id="@+id/sign_out"

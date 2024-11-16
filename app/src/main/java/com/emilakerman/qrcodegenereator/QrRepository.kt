@@ -13,17 +13,15 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 
 class QrRepository {
-    private lateinit var auth: FirebaseAuth
-    private val _client = OkHttpClient()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance();
+    private val client = OkHttpClient()
 
     // TODO: Add Toast For Success/Failure.
     fun uploadImage(bitmap: Bitmap)  {
-        auth = FirebaseAuth.getInstance();
         val bitMapUtils = BitMapUtils();
         // Convert Bitmap to byte array
         val byteArray = bitMapUtils.bitmapToByteArray(bitmap)
@@ -51,7 +49,7 @@ class QrRepository {
             .build()
 
         // Send the request
-        _client.newCall(request).enqueue(object : Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println("Request failed with exception: ${e.message}")
                 e.printStackTrace()
@@ -69,14 +67,13 @@ class QrRepository {
         })
     }
     fun getImagesCount(callback: (Int) -> Unit) {
-        auth = FirebaseAuth.getInstance();
         val keys = ApiKeys()
         val request = Request.Builder()
             .url("${keys.localHost}getQRCount")
             .addHeader("user", auth.currentUser?.uid.toString())
             .build()
 
-        _client.newCall(request).enqueue(object : Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println("Request failed with exception: ${e.message}")
                 callback(0)
@@ -100,14 +97,13 @@ class QrRepository {
     // Node.js fetches the blobs/images from Vercel Blob Storage.
     suspend fun getImages(): List<String> {
         var urls: List<String> = listOf<String>();
-        auth = FirebaseAuth.getInstance();
         val keys = ApiKeys()
         val request = Request.Builder()
             .url("${keys.baseUrl}getQRCodes")
             .addHeader("user", auth.currentUser?.uid.toString())
             .build()
 
-        _client.newCall(request).enqueue(object : Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println("Request failed with exception: ${e.message}")
             }

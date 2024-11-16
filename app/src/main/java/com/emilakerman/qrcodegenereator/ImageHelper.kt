@@ -56,9 +56,7 @@ class ImageHelper {
         // For devices running android >= Q
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             context.contentResolver?.also { resolver ->
-                // Content resolver will process the contentvalues
                 val contentValues = ContentValues().apply {
-                    // Putting file information in content values
                     put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
