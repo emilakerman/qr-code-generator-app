@@ -20,6 +20,7 @@ import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -99,26 +100,28 @@ class MainActivity : AppCompatActivity() {
         }
         binding.saveToCloud.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
-                return@setOnClickListener;
+                return@setOnClickListener
             } else {
-                // Saves QR Code to cloud/vercel
                 binding.saveToCloudProgressbar.visibility = View.VISIBLE
                 binding.saveToCloud.visibility = View.GONE
-                qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap()).also {
-                    // Adding a type of delay to simulate a loading state.
-                    Handler(Looper.getMainLooper()).postDelayed(
-                        {
-                            binding.saveToCloudProgressbar.visibility = View.GONE
-                            binding.saveToCloud.visibility = View.VISIBLE
-                        },
-                        1000
-                    )
+
+                lifecycleScope.launch {
+                    // Upload image
+                    qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap())
+
+                    delay(1000)
+
+                    // Fetch updated images after upload completes
+                    images = qrRepository.getImages()
+
+                    binding.saveToCloudProgressbar.visibility = View.GONE
+                    binding.saveToCloud.visibility = View.VISIBLE
+                    binding.inputField.text?.clear();
+                    binding.qrCodeImage.setImageResource(android.R.color.transparent);
                 }
             }
-            lifecycleScope.launch {
-                images = qrRepository.getImages();
-            }
         }
+
         // Either clears the input field or pastes from clipboard.
         // Depending on if the field is empty or not.
         binding.clearButton.setOnClickListener {

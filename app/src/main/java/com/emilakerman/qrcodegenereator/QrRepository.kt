@@ -99,7 +99,7 @@ class QrRepository {
         var urls: List<String> = listOf<String>();
         val keys = ApiKeys()
         val request = Request.Builder()
-            .url("${keys.baseUrl}getQRCodes")
+            .url("${keys.localHost}getQRCodes")
             .addHeader("user", auth.currentUser?.uid.toString())
             .build()
 
