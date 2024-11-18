@@ -81,14 +81,13 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                         // TODO: Change hardcoded text.
                         text = "Download"
                         setOnClickListener {
-                            val imageUrl = PASSED_DATA[index].toString()
+                            val imageUrl = passedImages[index].toString()
                             if (imageUrl.isEmpty()) {
                                 Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
                                 return@setOnClickListener
+                            } else {
+                                imageHelper.saveImageFromUrl(requireContext(), imageUrl)
                             }
-
-                            // Use requireContext() to pass a valid Context
-                            imageHelper.saveImageFromUrl(requireContext(), imageUrl)
                         }
 
                     }

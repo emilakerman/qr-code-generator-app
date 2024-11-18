@@ -31,26 +31,35 @@ class ImageHelper {
         val inputText = binding.inputField.text.toString()
         try {
             val encoder = BarcodeEncoder()
+            // Generate the QR code bitmap
             val qrCodeBitmap = encoder.encodeBitmap(inputText, BarcodeFormat.QR_CODE, 250, 250)
 
             val mutableBitmap = qrCodeBitmap.copy(Bitmap.Config.ARGB_8888, true)
             val canvas = Canvas(mutableBitmap)
 
             val paint = Paint()
-            paint.color = Color.BLACK
-            paint.textSize = 22f
-            paint.textAlign = Paint.Align.CENTER
+            paint.color = Color.BLACK  // Text color
+            paint.textAlign = Paint.Align.CENTER // Center align the text
 
-            // Add the text below the QR code
+            val maxTextWidth = canvas.width * 0.9f
+            var textSize = 30f
+            paint.textSize = textSize
+
+            while (paint.measureText(inputText) > maxTextWidth) {
+                textSize -= 1f
+                paint.textSize = textSize
+            }
+
             val xPos = canvas.width / 2f
-            val yPos = canvas.height - 20f
-            canvas.drawText(inputText, xPos, yPos, paint)
+            val yPos = canvas.height - 15f
 
+            canvas.drawText(inputText, xPos, yPos, paint)
             binding.qrCodeImage.setImageBitmap(mutableBitmap)
         } catch (e: WriterException) {
             println(e)
         }
     }
+
 
     // Downloads QR Code from URL.
     fun saveImageFromUrl(context: Context, imageUrl: String) {

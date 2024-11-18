@@ -202,6 +202,7 @@
             android:layout_marginTop="5dp"
             android:background="#22292d"
             android:hint="@string/paste_url"
+            android:maxLength="80"
             android:maxLines="1"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />

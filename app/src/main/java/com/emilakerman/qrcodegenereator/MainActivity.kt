@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
                 lifecycleScope.launch {
                     // Upload image
-                    qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap(), binding.inputField.text.toString())
+                    qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap())
 
                     delay(1000)
 
