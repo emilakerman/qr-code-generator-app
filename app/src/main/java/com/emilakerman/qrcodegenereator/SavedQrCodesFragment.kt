@@ -19,6 +19,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
     private val imageHelper = ImageHelper();
+    private val qrRepository = QrRepository();
 
     // Receives the data passed to the fragment.
     companion object {
@@ -83,7 +84,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                     }
 
                     // Create the Button below the ImageView
-                    val button = Button(requireContext()).apply {
+                    val downloadButton = Button(requireContext()).apply {
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -101,18 +102,168 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                         }
 
                     }
-                    // TODO: This is probably not a good way to do this.
-                    button.translationX = 200F;
+                    // Delete QR code image from vercel blob storage.
+                    val deleteButton = Button(requireContext()).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        // TODO: Change hardcoded text.
+                        text = "Delete"
+                        setOnClickListener {
+                            val imageUrl = passedImages[index].toString()
+                            if (imageUrl.isEmpty()) {
+                                Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
+                                return@setOnClickListener
+                            } else {
+                                qrRepository.deleteQrCode(imageUrl)
+                                val updatedArray = passedImages.filterIndexed { _, image -> image != imageUrl }.toTypedArray()
+                                container.removeAllViews()
+                                // Repopulate the container with updated items
+                                updatedArray.forEachIndexed { newIndex, newImageUrl ->
+                                    val itemLayout = LinearLayout(requireContext()).apply {
+                                        orientation = LinearLayout.VERTICAL
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                    }
+
+                                    val imageView = ImageView(requireContext()).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                        setImageResource(R.drawable.whiteprogress) // Placeholder
+                                        load(newImageUrl) {
+                                            placeholder(R.drawable.whiteprogress)
+                                            error(R.drawable.whiteprogress)
+                                        }
+                                        contentDescription = "$newIndex"
+                                    }
+
+                                    val downloadButton = Button(requireContext()).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                        // TODO: Fix hardcoded string.
+                                        text = "Download"
+                                        setOnClickListener {
+                                            if (newImageUrl.isEmpty()) {
+                                                Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
+                                                return@setOnClickListener
+                                            } else {
+                                                imageHelper.saveImageFromUrl(requireContext(), newImageUrl)
+                                            }
+                                        }
+                                    }
+
+                                    val deleteButton = Button(requireContext()).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                        // TODO: Fix hardcoded string.
+                                        text = "Delete"
+                                        setOnClickListener {
+                                            qrRepository.deleteQrCode(newImageUrl)
+                                            val refreshedArray = updatedArray.filterIndexed { _, image -> image != newImageUrl }.toTypedArray()
+                                            updateUI(refreshedArray)
+                                        }
+                                    }
+
+                                    itemLayout.addView(imageView)
+                                    itemLayout.addView(downloadButton)
+                                    itemLayout.addView(deleteButton)
+
+                                    container.addView(itemLayout)
+                                }
+                            }
+                        }
+
+
+                    }
+                    // TODO: Fix, this is probably not a good way to do this.
+                    downloadButton.translationX = 200F;
+                    deleteButton.translationX = 300F;
 
                     // Add ImageView and Button to the item layout
                     itemLayout.addView(imageView)
-                    itemLayout.addView(button)
+                    itemLayout.addView(downloadButton)
+                    itemLayout.addView(deleteButton)
 
                     // Add the item layout to the container
                     container.addView(itemLayout)
                 }
             }
         }
+
+    private fun updateUI(images: Array<String>) {
+        val container = binding.imageContainer
+        container.removeAllViews()
+
+        images.forEachIndexed { index, imageUrl ->
+            val itemLayout = LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val imageView = ImageView(requireContext()).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                setImageResource(R.drawable.whiteprogress) // Placeholder
+                load(imageUrl) {
+                    placeholder(R.drawable.whiteprogress)
+                    error(R.drawable.whiteprogress)
+                }
+                contentDescription = "$index"
+            }
+
+            val downloadButton = Button(requireContext()).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                // TODO: Fix hardcoded string.
+                text = "Download"
+                setOnClickListener {
+                    if (imageUrl.isEmpty()) {
+                        Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    } else {
+                        imageHelper.saveImageFromUrl(requireContext(), imageUrl)
+                    }
+                }
+            }
+
+            val deleteButton = Button(requireContext()).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                // TODO: Fix hardcoded string.
+                text = "Delete"
+                setOnClickListener {
+                    qrRepository.deleteQrCode(imageUrl)
+                    val refreshedArray = images.filterIndexed { _, image -> image != imageUrl }.toTypedArray()
+                    updateUI(refreshedArray)
+                }
+            }
+
+            itemLayout.addView(imageView)
+            itemLayout.addView(downloadButton)
+            itemLayout.addView(deleteButton)
+
+            container.addView(itemLayout)
+        }
+    }
+
     // Avoid memory leaks
     override fun onDestroyView() {
         super.onDestroyView()

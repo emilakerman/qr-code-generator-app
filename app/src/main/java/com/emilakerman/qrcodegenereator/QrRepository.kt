@@ -1,6 +1,7 @@
 package com.emilakerman.qrcodegenereator
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -122,5 +123,30 @@ class QrRepository {
         })
         delay(1000)
         return urls;
+    }
+    fun deleteQrCode(imageUrl: String) {
+        val keys = ApiKeys()
+        val request = Request.Builder()
+            .url("${keys.localHost}deleteQR")
+            .addHeader("user", auth.currentUser?.uid.toString())
+            .addHeader("stuff", imageUrl)
+            .delete()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Request failed with exception: ${e.message}")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (responseBody != null) {
+                    println("emil123" + responseBody)
+                    println("Delete Succeeded emil123!!!")
+                } else {
+                    println("Delete Failed emil123!!!.")
+                }
+            }
+        })
     }
 }

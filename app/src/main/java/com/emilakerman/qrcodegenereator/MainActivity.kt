@@ -37,9 +37,18 @@ class MainActivity : AppCompatActivity() {
         binding.saveToCloudProgressbar.visibility = View.GONE
         auth = FirebaseAuth.getInstance();
 
-        lifecycleScope.launch {
-            images = qrRepository.getImages();
+
+        fun fetchDataFromApi() {
+            lifecycleScope.launch {
+                try {
+                    images = qrRepository.getImages();
+                    println("Data: $images")
+                } catch (e: Exception) {
+                    println("Error: ${e.message}")
+                }
+            }
         }
+        fetchDataFromApi();
 
         val imageHelper = ImageHelper();
         fun View.hideKeyboard() {
@@ -110,7 +119,11 @@ class MainActivity : AppCompatActivity() {
                     delay(1000)
 
                     // Fetch updated images after upload completes
-                    images = qrRepository.getImages()
+                    try {
+                        images = qrRepository.getImages()
+                    } catch (e: Exception) {
+                        println("error fetching images after uploading a new one${e}")
+                    }
 
                     binding.saveToCloudProgressbar.visibility = View.GONE
                     binding.saveToCloud.visibility = View.VISIBLE
