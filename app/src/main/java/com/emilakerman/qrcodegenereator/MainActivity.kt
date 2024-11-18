@@ -19,10 +19,15 @@ import androidx.core.widget.addTextChangedListener
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
     private val qrRepository = QrRepository();
+    private lateinit var images: List<String>;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         binding.generateProgressbar.visibility = View.GONE
         binding.saveToCloudProgressbar.visibility = View.GONE
         auth = FirebaseAuth.getInstance();
+
+        lifecycleScope.launch {
+            images = qrRepository.getImages();
+        }
 
         val imageHelper = ImageHelper();
         fun View.hideKeyboard() {
@@ -106,6 +115,9 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
+            lifecycleScope.launch {
+                images = qrRepository.getImages();
+            }
         }
         // Either clears the input field or pastes from clipboard.
         // Depending on if the field is empty or not.
@@ -148,12 +160,8 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
-                // TODO: Test if I can pass the URLs here instead.
-                // Passes the "count" of how many qr codes a user has saved in the cloud to the fragment.
-                qrRepository.getImagesCount { count ->
-                    val fragment = SavedQrCodesFragment.newInstance(count)
-                    transaction.replace(R.id.fragment_container_view, fragment).commit()
-                }
+                val fragment = SavedQrCodesFragment.newInstance(images)
+                transaction.replace(R.id.fragment_container_view, fragment).commit()
                 true
             }
             R.id.sign_out -> {

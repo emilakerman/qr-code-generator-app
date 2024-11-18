@@ -9,24 +9,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
-import kotlinx.coroutines.launch
 import coil.load
 
 class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
     private val binding get() = _binding!!
-    private val qrRepository = QrRepository();
     private val imageHelper = ImageHelper();
 
     // Receives the data passed to the fragment.
     companion object {
-        private const val passedCount = "passedCount"
-        fun newInstance(exampleParam: Int): SavedQrCodesFragment {
+        private const val passedData = "passedData"
+        fun newInstance(exampleParam: List<String>): SavedQrCodesFragment {
             val fragment = SavedQrCodesFragment()
             val args = Bundle()
-            args.putInt(passedCount, exampleParam)
+            args.putStringArray(passedData, exampleParam.toTypedArray())
             fragment.arguments = args
             return fragment
         }
@@ -45,73 +42,68 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val container = binding.imageContainer
         val progressBar = binding.progressBar
-        val qrCodeCount = arguments?.getInt(passedCount)
-        if (qrCodeCount != null) {
+        val passedImages = arguments?.getStringArray(passedData)
+        if (passedImages != null) {
             progressBar.visibility = View.VISIBLE
-            lifecycleScope.launch {
-                val images = qrRepository.getImages()
-                progressBar.visibility = View.GONE
+            progressBar.visibility = View.GONE
                 // This adds ImageViews and Buttons dynamically with asynchronous images.
-                repeat(qrCodeCount) { index ->
-                    val imageUrl = images.getOrNull(index)
-                    if (imageUrl != null) {
-                        // Create a vertical LinearLayout to hold both ImageView and Button
-                        val itemLayout = LinearLayout(requireContext()).apply {
-                            orientation = LinearLayout.VERTICAL
-                            layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                            )
-                        }
-
-                        // Create the ImageView for the image
-                        val imageView = ImageView(requireContext()).apply {
-                            layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                            )
-                            setImageResource(R.drawable.placeholder) // Placeholder
-                            load(imageUrl) {
-                                placeholder(R.drawable.placeholder)
-                                error(R.drawable.placeholder)
-                            }
-                            contentDescription = "$index"
-                        }
-
-                        // Create the Button below the ImageView
-                        val button = Button(requireContext()).apply {
-                            layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                            )
-                            // TODO: Change hardcoded text.
-                            text = "Download"
-                            setOnClickListener {
-                                val imageUrl = images[index]
-                                if (imageUrl.isNullOrEmpty()) {
-                                    Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
-                                    return@setOnClickListener
-                                }
-
-                                // Use requireContext() to pass a valid Context
-                                imageHelper.saveImageFromUrl(requireContext(), imageUrl)
-                            }
-
-                        }
-                        // TODO: This is probably not a good way to do this.
-                        button.translationX = 200F;
-
-                        // Add ImageView and Button to the item layout
-                        itemLayout.addView(imageView)
-                        itemLayout.addView(button)
-
-                        // Add the item layout to the container
-                        container.addView(itemLayout)
+                repeat(passedImages.size) { index ->
+                    val imageUrl = passedImages[index]
+                    // Create a vertical LinearLayout to hold both ImageView and Button
+                    val itemLayout = LinearLayout(requireContext()).apply {
+                        orientation = LinearLayout.VERTICAL
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
                     }
+
+                    // Create the ImageView for the image
+                    val imageView = ImageView(requireContext()).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        setImageResource(R.drawable.placeholder) // Placeholder
+                        load(imageUrl) {
+                            placeholder(R.drawable.placeholder)
+                            error(R.drawable.placeholder)
+                        }
+                        contentDescription = "$index"
+                    }
+
+                    // Create the Button below the ImageView
+                    val button = Button(requireContext()).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        // TODO: Change hardcoded text.
+                        text = "Download"
+                        setOnClickListener {
+                            val imageUrl = passedData[index].toString()
+                            if (imageUrl.isEmpty()) {
+                                Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
+                                return@setOnClickListener
+                            }
+
+                            // Use requireContext() to pass a valid Context
+                            imageHelper.saveImageFromUrl(requireContext(), imageUrl)
+                        }
+
+                    }
+                    // TODO: This is probably not a good way to do this.
+                    button.translationX = 200F;
+
+                    // Add ImageView and Button to the item layout
+                    itemLayout.addView(imageView)
+                    itemLayout.addView(button)
+
+                    // Add the item layout to the container
+                    container.addView(itemLayout)
                 }
             }
         }
-    }
     // Avoid memory leaks
     override fun onDestroyView() {
         super.onDestroyView()
