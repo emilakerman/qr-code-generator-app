@@ -1,6 +1,8 @@
 package com.emilakerman.qrcodegenereator
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
 import coil.load
+import okhttp3.internal.wait
 
 class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
     private var _binding: SavedQrCodesFragmentBinding? = null
@@ -43,9 +46,15 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         val container = binding.imageContainer
         val progressBar = binding.progressBar
         val passedImages = arguments?.getStringArray(PASSED_DATA)
+        progressBar.visibility = View.VISIBLE
+        container.visibility = View.GONE
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                progressBar.visibility = View.GONE
+                container.visibility = View.VISIBLE
+            },
+            1000,)
         if (passedImages != null) {
-            progressBar.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
                 // This adds ImageViews and Buttons dynamically with asynchronous images.
                 repeat(passedImages.size) { index ->
                     val imageUrl = passedImages[index]
@@ -58,16 +67,17 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                         )
                     }
 
+
                     // Create the ImageView for the image
                     val imageView = ImageView(requireContext()).apply {
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
-                        setImageResource(R.drawable.placeholder) // Placeholder
+                        setImageResource(R.drawable.whiteprogress) // Placeholder
                         load(imageUrl) {
-                            placeholder(R.drawable.placeholder)
-                            error(R.drawable.placeholder)
+                            placeholder(R.drawable.whiteprogress)
+                            error(R.drawable.whiteprogress)
                         }
                         contentDescription = "$index"
                     }
