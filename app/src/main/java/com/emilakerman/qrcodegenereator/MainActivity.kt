@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val qrRepository = QrRepository();
     private lateinit var images: List<String>;
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -107,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
                 lifecycleScope.launch {
                     // Upload image
-                    qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap())
+                    qrRepository.uploadImage(binding.qrCodeImage.drawToBitmap(), binding.inputField.text.toString())
 
                     delay(1000)
 

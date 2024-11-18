@@ -21,7 +21,7 @@ class QrRepository {
     private val client = OkHttpClient()
 
     // TODO: Add Toast For Success/Failure.
-    fun uploadImage(bitmap: Bitmap)  {
+    fun uploadImage(bitmap: Bitmap, link: String)  {
         val bitMapUtils = BitMapUtils();
         // Convert Bitmap to byte array
         val byteArray = bitMapUtils.bitmapToByteArray(bitmap)
@@ -43,7 +43,7 @@ class QrRepository {
         // Create the request
         val request = Request.Builder()
             //NOTE: This works now but I turned off auth protection.
-            .url("${keys.baseUrl}putQR")
+            .url("${keys.localHost}putQR")
             .addHeader("user", auth.currentUser?.uid.toString())
             .put(requestBody)
             .build()

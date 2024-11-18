@@ -19,11 +19,11 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
 
     // Receives the data passed to the fragment.
     companion object {
-        private const val passedData = "passedData"
-        fun newInstance(exampleParam: List<String>): SavedQrCodesFragment {
+        private const val PASSED_DATA = "passedData"
+        fun newInstance(qrCodes: List<String>): SavedQrCodesFragment {
             val fragment = SavedQrCodesFragment()
             val args = Bundle()
-            args.putStringArray(passedData, exampleParam.toTypedArray())
+            args.putStringArray(PASSED_DATA, qrCodes.toTypedArray())
             fragment.arguments = args
             return fragment
         }
@@ -42,7 +42,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val container = binding.imageContainer
         val progressBar = binding.progressBar
-        val passedImages = arguments?.getStringArray(passedData)
+        val passedImages = arguments?.getStringArray(PASSED_DATA)
         if (passedImages != null) {
             progressBar.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
@@ -81,7 +81,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                         // TODO: Change hardcoded text.
                         text = "Download"
                         setOnClickListener {
-                            val imageUrl = passedData[index].toString()
+                            val imageUrl = PASSED_DATA[index].toString()
                             if (imageUrl.isEmpty()) {
                                 Toast.makeText(requireContext(), "Invalid URL", Toast.LENGTH_SHORT).show()
                                 return@setOnClickListener

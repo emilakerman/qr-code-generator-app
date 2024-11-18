@@ -3,6 +3,9 @@ package com.emilakerman.qrcodegenereator
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -28,12 +31,27 @@ class ImageHelper {
         val inputText = binding.inputField.text.toString()
         try {
             val encoder = BarcodeEncoder()
-            val bitmap = encoder.encodeBitmap(inputText, BarcodeFormat.QR_CODE, 250, 250)
-            binding.qrCodeImage.setImageBitmap(bitmap)
-        } catch(e : WriterException) {
-            println(e);
+            val qrCodeBitmap = encoder.encodeBitmap(inputText, BarcodeFormat.QR_CODE, 250, 250)
+
+            val mutableBitmap = qrCodeBitmap.copy(Bitmap.Config.ARGB_8888, true)
+            val canvas = Canvas(mutableBitmap)
+
+            val paint = Paint()
+            paint.color = Color.BLACK
+            paint.textSize = 22f
+            paint.textAlign = Paint.Align.CENTER
+
+            // Add the text below the QR code
+            val xPos = canvas.width / 2f
+            val yPos = canvas.height - 20f
+            canvas.drawText(inputText, xPos, yPos, paint)
+
+            binding.qrCodeImage.setImageBitmap(mutableBitmap)
+        } catch (e: WriterException) {
+            println(e)
         }
     }
+
     // Downloads QR Code from URL.
     fun saveImageFromUrl(context: Context, imageUrl: String) {
         Glide.with(context)
