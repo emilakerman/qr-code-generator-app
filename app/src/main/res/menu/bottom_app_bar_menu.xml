@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
         android:title="@string/home"
-        android:icon="@drawable/baseline_home_24" />
+        android:icon="@drawable/baseline_home_24"
+        app:showAsAction="always" />
     <item
         android:id="@+id/gallery"
         android:title="@string/saved_qr_codes"
-        android:icon="@android:drawable/ic_menu_gallery" />
+        android:icon="@android:drawable/ic_menu_gallery"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/sign_out"
         android:title="@string/sign_out"
-        android:icon="@android:drawable/ic_lock_power_off" />
+        android:icon="@android:drawable/ic_lock_power_off"
+        />
 </menu>

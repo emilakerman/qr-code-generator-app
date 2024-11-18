@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity() {
             setSupportActionBar(binding.bottomAppBar)
             setSupportActionBar(toolbar)
             toolbar.title = ""
+            toolbar.overflowIcon?.setTint(Color.WHITE)
+            /*toolbar.setBackgroundColor(Color.parseColor("#303436"))*/
         }
         setupToolbar()
         binding.inputField.addTextChangedListener {
