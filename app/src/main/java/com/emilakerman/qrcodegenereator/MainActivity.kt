@@ -173,6 +173,14 @@ class MainActivity : AppCompatActivity() {
                 val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
                 if (fragment != null) {
                     transaction.remove(fragment).commit()
+                    lifecycleScope.launch {
+                        try {
+                            images = qrRepository.getImages();
+                            println("Data: $images")
+                        } catch (e: Exception) {
+                            println("Error: ${e.message}")
+                        }
+                    }
                 }
                 true
             }

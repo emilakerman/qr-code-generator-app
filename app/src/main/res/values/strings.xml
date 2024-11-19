@@ -12,6 +12,7 @@
     <string name="sign_up">Sign up</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="delete">Delete</string>
     <string name="generate_qr_codes">Generate QR Codes</string>
     <string name="quick_easy_free">Quick, Easy, Free</string>
 </resources>
