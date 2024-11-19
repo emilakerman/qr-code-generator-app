@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
             setSupportActionBar(toolbar)
             toolbar.title = ""
             toolbar.overflowIcon?.setTint(Color.WHITE)
-            /*toolbar.setBackgroundColor(Color.parseColor("#303436"))*/
         }
         setupToolbar()
         binding.inputField.addTextChangedListener {
@@ -185,6 +184,9 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
+                if (images.isEmpty()) {
+                    return false
+                }
                 val fragment = SavedQrCodesFragment.newInstance(images)
                 transaction.replace(R.id.fragment_container_view, fragment).commit()
                 true
