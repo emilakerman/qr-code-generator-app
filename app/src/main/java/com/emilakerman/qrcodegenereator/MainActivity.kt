@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         return null
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bottom_app_bar_menu, menu)
+        menuInflater.inflate(R.menu.top_menu, menu)
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
