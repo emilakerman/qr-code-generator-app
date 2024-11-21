@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
     private val qrRepository = QrRepository();
-    private lateinit var images: List<String>;
+    private var images: List<String> = listOf("temp");
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -184,12 +184,13 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.gallery -> {
-                if (images.isEmpty()) {
+                if (images.isEmpty() || images.contains("temp")) {
                     return false
+                } else {
+                    val fragment = SavedQrCodesFragment.newInstance(images)
+                    transaction.replace(R.id.fragment_container_view, fragment).commit()
+                    true
                 }
-                val fragment = SavedQrCodesFragment.newInstance(images)
-                transaction.replace(R.id.fragment_container_view, fragment).commit()
-                true
             }
             R.id.sign_out -> {
                 auth = FirebaseAuth.getInstance();
