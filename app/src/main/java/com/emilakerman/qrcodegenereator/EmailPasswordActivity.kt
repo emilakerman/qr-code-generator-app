@@ -18,6 +18,7 @@ class EmailPasswordActivity : AppCompatActivity() {
         binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
+        binding.qrHeaderImage.setImageResource(R.drawable.image);
         binding.signInButton.setOnClickListener {
             if (fieldsEmpty()) {
                 return@setOnClickListener;
