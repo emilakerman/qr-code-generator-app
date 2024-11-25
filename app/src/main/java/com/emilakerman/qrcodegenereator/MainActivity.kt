@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val qrRepository = QrRepository();
     private var images: List<String> = listOf("temp");
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -125,6 +126,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.saveToCloud.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
+                return@setOnClickListener
+            } else if(images.lastIndex >= 100) {
+                // Qr Code Cap Reached in Cloud. Cant Save More.
+                Toast.makeText(this, "You have reached the max cap of 100 Qr Codes!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
                 binding.saveToCloudProgressbar.visibility = View.VISIBLE
