@@ -21,7 +21,6 @@ class QrRepository {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance();
     private val client = OkHttpClient()
 
-    // TODO: Add Toast For Success/Failure.
     fun uploadImage(bitmap: Bitmap)  {
         val bitMapUtils = BitMapUtils();
         // Convert Bitmap to byte array

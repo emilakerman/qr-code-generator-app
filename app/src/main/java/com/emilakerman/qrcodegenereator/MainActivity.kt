@@ -152,12 +152,12 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                         println("error fetching images after uploading a new one${e}")
                     }
-
                     binding.saveToCloudProgressbar.visibility = View.GONE
                     binding.saveToCloud.visibility = View.VISIBLE
                     binding.inputField.text?.clear();
                     binding.qrCodeImage.setImageResource(android.R.color.transparent);
                 }
+                Toast.makeText(this, "Qr Code Saved to Cloud!", Toast.LENGTH_SHORT).show()
             }
         }
 
