@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.File
 import java.io.IOException
 
@@ -100,7 +101,7 @@ class QrRepository {
     fun deleteQrCode(imageUrl: String) {
         val keys = ApiKeys()
         val request = Request.Builder()
-            .url("${keys.localHost}deleteQR")
+            .url("${keys.baseUrl}deleteQR")
             .addHeader("user", auth.currentUser?.uid.toString())
             .addHeader("stuff", imageUrl)
             .delete()
@@ -114,7 +115,7 @@ class QrRepository {
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
                 if (responseBody != null) {
-                    println("emil123" + responseBody)
+                    println("emil123" + responseBody.toResponseBody())
                     println("Delete Succeeded emil123!!!")
                 } else {
                     println("Delete Failed emil123!!!.")

@@ -204,6 +204,7 @@ class MainActivity : AppCompatActivity() {
                         try {
                             images = qrRepository.getImages();
                             println("Data: $images")
+                            delay(1000)
                         } catch (e: Exception) {
                             println("Error: ${e.message}")
                         }
