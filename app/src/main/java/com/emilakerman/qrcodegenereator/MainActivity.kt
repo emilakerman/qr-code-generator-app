@@ -17,10 +17,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.emilakerman.qrcodegenereator.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -68,7 +68,23 @@ class MainActivity : AppCompatActivity() {
         binding.inputField.addTextChangedListener {
             binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         }
-
+        var toggleZoom = false
+        binding.qrCodeImage.setOnClickListener {
+            toggleZoom = !toggleZoom
+            if (toggleZoom) {
+                binding.qrCodeImage.animate()
+                    .scaleX(binding.qrCodeImage.scaleX + 0.4f)
+                    .scaleY(binding.qrCodeImage.scaleY + 0.4f)
+                    .setDuration(300)
+                    .start()
+            } else {
+                binding.qrCodeImage.animate()
+                    .scaleX(binding.qrCodeImage.scaleX - 0.4f)
+                    .scaleY(binding.qrCodeImage.scaleY - 0.4f)
+                    .setDuration(300)
+                    .start()
+            }
+        }
         binding.generateButton.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;

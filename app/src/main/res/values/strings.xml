@@ -15,4 +15,5 @@
     <string name="delete">Delete</string>
     <string name="generate_qr_codes">Generate QR Codes</string>
     <string name="quick_easy_free">Quick, Easy, Free</string>
+    <string name="password_tip">A password must contain both upper and lower case characters and at least one digit.</string>
 </resources>

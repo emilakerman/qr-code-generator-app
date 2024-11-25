@@ -1,7 +1,9 @@
 package com.emilakerman.qrcodegenereator
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.emilakerman.qrcodegenereator.databinding.ActivityEmailPasswordBinding
@@ -56,8 +58,8 @@ class EmailPasswordActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
+                        "Sign In Failed. ${task.exception?.message}",
+                        Toast.LENGTH_LONG,
                     ).show()
                 }
             }
@@ -69,10 +71,11 @@ class EmailPasswordActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {
+                    binding.passwordTip.visibility = View.VISIBLE;
                     Toast.makeText(
                         baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
+                        "Sign Up Failed. ${task.exception?.message}",
+                        Toast.LENGTH_LONG,
                     ).show()
                 }
             }
