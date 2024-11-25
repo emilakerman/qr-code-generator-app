@@ -67,35 +67,6 @@ class QrRepository {
 
         })
     }
-    // Use this to see if user has reached the cap of 100 qr codes in the cloud.
-    fun getImagesCount(): Int {
-        val keys = ApiKeys()
-        var length: Int = 0;
-        val request = Request.Builder()
-            .url("${keys.baseUrl}getQRCount")
-            .addHeader("user", auth.currentUser?.uid.toString())
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("Request failed with exception: ${e.message}")
-                return
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
-                val listLength: Int? = responseBody?.toIntOrNull()
-
-                length = if (listLength != null) {
-                    listLength;
-                } else {
-                    println("Failed to parse the list length as an integer.")
-                    0
-                }
-            }
-        })
-        return length;
-    }
     // This method fetches the QR codes for the logged in user.
     // The Request is sent to the Node.js server hosted on Vercel.
     // Node.js fetches the blobs/images from Vercel Blob Storage.
