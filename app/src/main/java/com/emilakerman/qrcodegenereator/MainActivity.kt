@@ -34,12 +34,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = FirebaseAuth.getInstance();
+        // Sets some progress bars visibility to GONE, will set to VISIBLE later stages of app usage.
         binding.saveProgressbar.visibility = View.GONE
         binding.generateProgressbar.visibility = View.GONE
         binding.saveToCloudProgressbar.visibility = View.GONE
-        auth = FirebaseAuth.getInstance();
 
-
+        // Initial fetch when app starts.
         fun fetchDataFromApi() {
             lifecycleScope.launch {
                 try {
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         binding.inputField.addTextChangedListener {
             binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         }
+        // Zoom Toggle Feature for the QR Code ImageView.
         var toggleZoom = false
         binding.qrCodeImage.setOnClickListener {
             toggleZoom = !toggleZoom
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                     .start()
             }
         }
+        // Generate Qr Code Feature.
         binding.generateButton.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
@@ -106,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                 it.hideKeyboard()
             }
         }
+        // Saves the QR Code Image to the device.
         binding.saveButton.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener;
@@ -124,6 +128,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        // Saves the Qr Code using the Node.js backend to Vercel Blob Storage.
         binding.saveToCloud.setOnClickListener {
             if (binding.inputField.text.toString() == "") {
                 return@setOnClickListener
@@ -173,6 +178,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    // Pastes whatever the user has in their clipboard to the edit test field.
      private fun pasteFromClipboard(context: Context): String? {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         if (clipboard.hasPrimaryClip() && clipboard.primaryClip != null) {
@@ -186,6 +192,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.top_menu, menu)
         return true
     }
+    // Navigation.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val transaction = supportFragmentManager.beginTransaction()
         return when (item.itemId) {
@@ -204,6 +211,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+            // Opens the fragment that displays a list of Qr Codes saved in the cloud.
             R.id.gallery -> {
                 if (images.isEmpty() || images.contains("temp")) {
                     return false
@@ -213,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
             }
+            // Signs out user and redirects to start screen.
             R.id.sign_out -> {
                 auth = FirebaseAuth.getInstance();
                 auth.signOut().also {
