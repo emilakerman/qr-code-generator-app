@@ -90,12 +90,13 @@ class MainActivity : AppCompatActivity() {
         }
         // Generate Qr Code Feature.
         binding.generateButton.setOnClickListener {
-            if (binding.inputField.text.toString() == "") {
+            if (binding.inputField.text.toString().isEmpty()) {
                 return@setOnClickListener;
             } else {
                 binding.generateProgressbar.visibility = View.VISIBLE
                 binding.generateButton.text = ""
                 imageHelper.generateQrCode(binding).also {
+                    binding.qrCodeImage.visibility = View.VISIBLE
                     // Adding a type of delay to simulate a loading state.
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
         // Saves the QR Code Image to the device.
         binding.saveButton.setOnClickListener {
-            if (binding.inputField.text.toString() == "") {
+            if (binding.qrCodeImage.visibility == View.GONE) {
                 return@setOnClickListener;
             } else {
                 binding.saveProgressbar.visibility = View.VISIBLE
@@ -130,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         }
         // Saves the Qr Code using the Node.js backend to Vercel Blob Storage.
         binding.saveToCloud.setOnClickListener {
-            if (binding.inputField.text.toString() == "") {
+            if (binding.qrCodeImage.visibility == View.GONE) {
                 return@setOnClickListener
             } else if(images.lastIndex >= 100) {
                 // Qr Code Cap Reached in Cloud. Cant Save More.
@@ -157,6 +158,7 @@ class MainActivity : AppCompatActivity() {
                     binding.inputField.text?.clear();
                     binding.qrCodeImage.setImageResource(android.R.color.transparent);
                 }
+                binding.qrCodeImage.visibility = View.GONE
                 Toast.makeText(this, "Qr Code Saved to Cloud!", Toast.LENGTH_SHORT).show()
             }
         }
@@ -219,8 +221,19 @@ class MainActivity : AppCompatActivity() {
                 if (images.isEmpty() || images.contains("temp") || fragment is SavedQrCodesFragment) {
                     return false
                 } else {
-                    val fragmentToCommit = SavedQrCodesFragment.newInstance(images)
-                    transaction.replace(R.id.fragment_container_view, fragmentToCommit).commit()
+                    lifecycleScope.launch {
+                        try {
+                            images = qrRepository.getImages();
+                            if (images.isEmpty()) {
+                                return@launch
+                            }
+                            val fragmentToCommit = SavedQrCodesFragment.newInstance(images)
+                            transaction.replace(R.id.fragment_container_view, fragmentToCommit).commit()
+                            println("Data: $images")
+                        } catch (e: Exception) {
+                            println("Error: ${e.message}")
+                        }
+                    }
                     true
                 }
             }

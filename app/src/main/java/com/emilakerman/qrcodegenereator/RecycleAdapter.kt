@@ -62,6 +62,5 @@ class RecycleAdapter(private val fragmentManager: FragmentManager, private val c
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val downloadButton: Button = itemView.findViewById(R.id.download)
         val deleteButton: Button = itemView.findViewById(R.id.delete)
-        val fragmentStuff: View? = itemView.findViewById(R.id.fragment_container_view);
     }
 }
