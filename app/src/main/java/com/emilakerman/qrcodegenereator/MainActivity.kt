@@ -198,27 +198,29 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.home -> {
                 val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+                lifecycleScope.launch {
+                    try {
+                        images = qrRepository.getImages();
+                        println("Data: $images")
+                        delay(1000)
+                    } catch (e: Exception) {
+                        println("Error: ${e.message}")
+                    }
+                }
                 if (fragment != null) {
                     transaction.remove(fragment).commit()
-                    lifecycleScope.launch {
-                        try {
-                            images = qrRepository.getImages();
-                            println("Data: $images")
-                            delay(1000)
-                        } catch (e: Exception) {
-                            println("Error: ${e.message}")
-                        }
-                    }
                 }
                 true
             }
             // Opens the fragment that displays a list of Qr Codes saved in the cloud.
             R.id.gallery -> {
-                if (images.isEmpty() || images.contains("temp")) {
+                val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+                // Disables the Gallery Menu Icon when either of the three is true.
+                if (images.isEmpty() || images.contains("temp") || fragment is SavedQrCodesFragment) {
                     return false
                 } else {
-                    val fragment = SavedQrCodesFragment.newInstance(images)
-                    transaction.replace(R.id.fragment_container_view, fragment).commit()
+                    val fragmentToCommit = SavedQrCodesFragment.newInstance(images)
+                    transaction.replace(R.id.fragment_container_view, fragmentToCommit).commit()
                     true
                 }
             }
