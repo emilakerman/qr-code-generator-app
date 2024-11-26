@@ -33,17 +33,17 @@ class ImageHelper {
         try {
             val encoder = BarcodeEncoder()
             // Generate the QR code bitmap
-            val qrCodeBitmap = encoder.encodeBitmap(inputText, BarcodeFormat.QR_CODE, 250, 250)
+            val qrCodeBitmap = encoder.encodeBitmap(inputText, BarcodeFormat.QR_CODE, QrCode().width, QrCode().height)
 
             val mutableBitmap = qrCodeBitmap.copy(Bitmap.Config.ARGB_8888, true)
             val canvas = Canvas(mutableBitmap)
 
+            // Adds the text to the bitmap.
             val paint = Paint()
-            paint.color = Color.BLACK  // Text color
-            paint.textAlign = Paint.Align.CENTER // Center align the text
-
+            paint.color = Color.BLACK
+            paint.textAlign = Paint.Align.CENTER
             val maxTextWidth = canvas.width * 0.9f
-            var textSize = 30f
+            var textSize = QrCode().textSize
             paint.textSize = textSize
 
             while (paint.measureText(inputText) > maxTextWidth) {
