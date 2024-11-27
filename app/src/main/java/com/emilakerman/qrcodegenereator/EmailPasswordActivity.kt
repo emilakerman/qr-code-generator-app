@@ -30,6 +30,7 @@ class EmailPasswordActivity : AppCompatActivity() {
         // Hides the QR Header Code when typing in fields. Helps smaller screens.
         binding.editTextTextEmailAddress.setOnFocusChangeListener { _, _ -> binding.qrHeaderImage.visibility = View.GONE }
         binding.editTextTextPassword.setOnFocusChangeListener { _, _ -> binding.qrHeaderImage.visibility = View.GONE }
+        // Extra check.
         binding.editTextTextEmailAddress.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
         binding.editTextTextPassword.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
 
