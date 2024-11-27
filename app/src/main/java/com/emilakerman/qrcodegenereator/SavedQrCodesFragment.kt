@@ -1,5 +1,6 @@
 package com.emilakerman.qrcodegenereator
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -43,6 +44,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         val progressBar = binding.progressBar
         val passedImages = arguments?.getStringArray(PASSED_DATA)
         progressBar.visibility = View.VISIBLE
+        val orientation = resources.configuration.orientation
         Handler(Looper.getMainLooper()).postDelayed(
             {
                 progressBar.visibility = View.GONE
@@ -51,6 +53,13 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
                 adapter = RecycleAdapter(fragmentManager = parentFragmentManager, requireContext(), passedImages)
                 recycler.layoutManager = LinearLayoutManager(requireContext())
                 recycler.adapter = adapter
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    recycler.layoutManager = LinearLayoutManager(
+                        context,
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                }
             },
             1000,
         )
