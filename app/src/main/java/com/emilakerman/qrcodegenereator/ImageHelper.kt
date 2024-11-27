@@ -27,7 +27,6 @@ import com.bumptech.glide.request.transition.Transition
 class ImageHelper {
 
     // Generates a QR code and displays in the binding.
-    // TODO: Maybe save one version without text on and one with. So user can choose which to use.
     fun generateQrCode(binding: ActivityMainBinding) {
         val inputText = binding.inputField.text.toString()
         try {

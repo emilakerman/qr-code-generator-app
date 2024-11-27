@@ -1,7 +1,6 @@
 package com.emilakerman.qrcodegenereator
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,7 +13,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.File
 import java.io.IOException
 
@@ -97,6 +95,7 @@ class QrRepository {
         delay(1000)
         return urls;
     }
+    // Deletes QR Code in backend.
     fun deleteQrCode(imageUrl: String) {
         val keys = ApiKeys()
         val request = Request.Builder()
@@ -114,10 +113,9 @@ class QrRepository {
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
                 if (responseBody != null) {
-                    println("emil123" + responseBody.toResponseBody())
-                    println("Delete Succeeded emil123!!!")
+                    println("Delete Succeeded with code: ${response.code}")
                 } else {
-                    println("Delete Failed emil123!!!.")
+                    println("Delete Failed wth code: ${response.code}")
                 }
             }
         })
