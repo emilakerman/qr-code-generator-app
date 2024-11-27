@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">QR Code Generator</string>
+    <string name="signed_out">Loggade ut!</string>
+    <string name="download">Ladda ned</string>
+    <string name="invalid_url">Ogiltig URL</string>
+    <string name="home">Hem</string>
+    <string name="saved_qr_codes">Sparade QR-koder</string>
+    <string name="sign_out">Logga ut</string>
+    <string name="paste_url">Klistra in url...</string>
+    <string name="generate">Generera</string>
+    <string name="sign_in">Logga in</string>
+    <string name="sign_up">Registrera</string>
+    <string name="email">E-post</string>
+    <string name="password">Lösenord</string>
+    <string name="delete">Radera</string>
+    <string name="generate_qr_codes">Generera QR-koder</string>
+    <string name="quick_easy_free">Snabbt, Enkelt, Gratis</string>
+    <string name="password_tip">Ett lösenord måste innehålla både stora och små bokstäver och minst en siffra.</string>
+    <string name="qr_code_saved_to_cloud">"QR-kod sparad i molnet!"</string>
+    <string name="too_many_qr_codes_message">"Du har nått maxtaket på 100 QR-koder!"</string>
+    <string name="qr_code_saved_to_gallery">"QR-kod sparad i galleri!"</string>
+    <string name="sign_in_failed">Inloggning misslyckades</string>
+    <string name="sign_up_failed">Registrering misslyckades</string>
+</resources>
