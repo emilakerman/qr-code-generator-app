@@ -28,8 +28,10 @@ class EmailPasswordActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance();
         binding.qrHeaderImage.setImageResource(R.drawable.image);
         // Hides the QR Header Code when typing in fields. Helps smaller screens.
-        binding.editTextTextEmailAddress.setOnFocusChangeListener { _, b -> binding.qrHeaderImage.visibility = View.GONE }
-        binding.editTextTextPassword.setOnFocusChangeListener { _, b -> binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextEmailAddress.setOnFocusChangeListener { _, _ -> binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextPassword.setOnFocusChangeListener { _, _ -> binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextEmailAddress.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextPassword.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
 
         binding.signInButton.setOnClickListener {
             it.hideKeyboard()
