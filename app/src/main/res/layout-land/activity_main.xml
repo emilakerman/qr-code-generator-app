@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D8015C92"
+    android:translationZ="1dp"
+    tools:context=".MainActivity">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#015c92"
+        android:fitsSystemWindows="true"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/top_menu"
+        app:subtitleTextColor="#FFFFFF"
+        app:titleTextColor="#FFFFFF" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/darkConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginEnd="400dp"
+        android:background="@drawable/shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="400dp"
+        android:translationZ="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/generateButton"
+        android:layout_width="165dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:backgroundTint="#015c92"
+        android:text="@string/generate"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/darkConstraint" />
+
+
+    <LinearLayout
+        android:layout_width="91dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/generateProgressbar"
+        app:layout_constraintStart_toEndOf="@+id/generateButton"
+        app:layout_constraintTop_toTopOf="@+id/generateProgressbar">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+
+                android:id="@+id/saveProgressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:indeterminate="false"
+                android:indeterminateTint="#FFFFFF"
+                android:paddingRight="10dp"
+                android:progressBackgroundTint="#FFFFFF"
+                android:progressBackgroundTintMode="add"
+                android:progressTint="#FFFFFF"
+                android:secondaryProgressTint="#FFFFFF"
+                android:secondaryProgressTintMode="src_atop"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingRight="10dp"
+                android:src="@android:drawable/stat_sys_download" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/saveToCloudProgressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:indeterminate="false"
+                android:indeterminateTint="#FFFFFF"
+                android:paddingRight="10dp"
+                android:progressBackgroundTint="#FFFFFF"
+                android:progressBackgroundTintMode="add"
+                android:progressTint="#FFFFFF"
+                android:secondaryProgressTint="#FFFFFF"
+                android:secondaryProgressTintMode="src_atop"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/saveToCloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/outline_cloud_upload_24" />
+        </FrameLayout>
+    </LinearLayout>
+
+
+    <ProgressBar
+
+        android:id="@+id/generateProgressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:indeterminate="false"
+        android:indeterminateTint="#FFFFFF"
+        android:progressBackgroundTint="#FFFFFF"
+        android:progressBackgroundTintMode="add"
+        android:progressTint="#FFFFFF"
+        android:secondaryProgressTint="#FFFFFF"
+        android:secondaryProgressTintMode="src_atop"
+        app:layout_constraintBottom_toBottomOf="@+id/generateButton"
+        app:layout_constraintEnd_toEndOf="@+id/generateButton"
+        app:layout_constraintStart_toStartOf="@+id/generateButton"
+        app:layout_constraintTop_toTopOf="@+id/generateButton" />
+
+    <ImageView
+        android:id="@+id/qrCodeImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/darkConstraint"
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/clearButton"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="18dp"
+        android:layout_weight="1"
+        android:background="#00FEF7FF"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:srcCompat="?attr/actionModePasteDrawable" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generateButton">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputField"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginTop="5dp"
+            android:background="#22292d"
+            android:hint="@string/paste_url"
+            android:maxLength="80"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
