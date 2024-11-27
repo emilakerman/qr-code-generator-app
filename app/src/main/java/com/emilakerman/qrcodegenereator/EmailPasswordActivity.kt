@@ -1,9 +1,11 @@
 package com.emilakerman.qrcodegenereator
 
+import android.content.Context
 import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.emilakerman.qrcodegenereator.databinding.ActivityEmailPasswordBinding
@@ -15,13 +17,21 @@ class EmailPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEmailPasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        fun View.hideKeyboard() {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(windowToken, 0)
+        }
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
         binding.qrHeaderImage.setImageResource(R.drawable.image);
+        binding.editTextTextEmailAddress.setOnFocusChangeListener { view, b -> binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextPassword.setOnFocusChangeListener { view, b -> binding.qrHeaderImage.visibility = View.GONE }
         binding.signInButton.setOnClickListener {
+            it.hideKeyboard()
+            binding.qrHeaderImage.visibility = View.VISIBLE
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
@@ -29,6 +39,8 @@ class EmailPasswordActivity : AppCompatActivity() {
             }
         }
         binding.signUpButton.setOnClickListener {
+            it.hideKeyboard()
+            binding.qrHeaderImage.visibility = View.VISIBLE
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
