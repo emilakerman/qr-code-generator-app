@@ -39,13 +39,13 @@ class MainActivity : AppCompatActivity() {
         binding.saveProgressbar.visibility = View.GONE
         binding.generateProgressbar.visibility = View.GONE
         binding.saveToCloudProgressbar.visibility = View.GONE
+        val imageHelper = ImageHelper();
 
         // Initial fetch when app starts.
         fun fetchDataFromApi() {
             lifecycleScope.launch {
                 try {
                     images = qrRepository.getImages();
-                    println("Data: $images")
                 } catch (e: Exception) {
                     println("Error: ${e.message}")
                 }
@@ -53,20 +53,21 @@ class MainActivity : AppCompatActivity() {
         }
         fetchDataFromApi();
 
-        val imageHelper = ImageHelper();
+        // Function to programmatically hide the keyboard after a code has been generated.
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(windowToken, 0)
         }
-
+        // Setup logic for the top material toolbar.
         fun setupToolbar() {
-            val toolbar: MaterialToolbar = binding.bottomAppBar;
-            setSupportActionBar(binding.bottomAppBar)
+            val toolbar: MaterialToolbar = binding.topAppBar;
+            setSupportActionBar(binding.topAppBar)
             setSupportActionBar(toolbar)
             toolbar.title = ""
             toolbar.overflowIcon?.setTint(Color.WHITE)
         }
         setupToolbar()
+        // This changes the icon to a "clear" icon instead of the paste icon.
         binding.inputField.addTextChangedListener {
             binding.clearButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         }
@@ -101,8 +102,7 @@ class MainActivity : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             binding.generateProgressbar.visibility = View.GONE
-                            // TODO: Fix hardcoded string.
-                            binding.generateButton.text = "Generate"
+                            binding.generateButton.text = getString(R.string.generate)
                         },
                         1000
                     )
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             } else if(images.lastIndex >= 100) {
                 // Qr Code Cap Reached in Cloud. Cant Save More.
-                Toast.makeText(this, "You have reached the max cap of 100 Qr Codes!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.too_many_qr_codes_message), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
                 binding.saveToCloudProgressbar.visibility = View.VISIBLE
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                     binding.qrCodeImage.setImageResource(android.R.color.transparent);
                 }
                 binding.qrCodeImage.visibility = View.GONE
-                Toast.makeText(this, "Qr Code Saved to Cloud!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.qr_code_saved_to_cloud), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -203,7 +203,6 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         images = qrRepository.getImages();
-                        println("Data: $images")
                         delay(1000)
                     } catch (e: Exception) {
                         println("Error: ${e.message}")
@@ -244,7 +243,7 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, EmailPasswordActivity::class.java)
                     startActivity(intent)
                 }
-                Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.signed_out), Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

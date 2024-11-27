@@ -16,4 +16,6 @@
     <string name="generate_qr_codes">Generate QR Codes</string>
     <string name="quick_easy_free">Quick, Easy, Free</string>
     <string name="password_tip">A password must contain both upper and lower case characters and at least one digit.</string>
+    <string name="qr_code_saved_to_cloud">"Qr Code Saved to Cloud!"</string>
+    <string name="too_many_qr_codes_message">"You have reached the max cap of 100 Qr Codes!"</string>
 </resources>
