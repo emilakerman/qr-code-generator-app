@@ -6,13 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class RecycleAdapter(private val fragmentManager: FragmentManager, private val context: Context, private var qrCodes: Array<String>?) :
     RecyclerView.Adapter<RecycleAdapter.ViewHolder>() {
@@ -48,7 +44,7 @@ class RecycleAdapter(private val fragmentManager: FragmentManager, private val c
             // Moves back to home activity/fragment if user deleted all Qr Codes.
             if (itemCount == 0) {
                 val transaction = fragmentManager.beginTransaction()
-                val fragment = fragmentManager.findFragmentById(R.id.fragment_container_view) // Replace with your container ID
+                val fragment = fragmentManager.findFragmentById(R.id.fragment_container_view)
                 if (fragment != null) {
                     transaction.remove(fragment).commit()
                 }

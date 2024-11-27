@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emilakerman.qrcodegenereator.databinding.SavedQrCodesFragmentBinding
@@ -48,6 +47,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
             {
                 progressBar.visibility = View.GONE
                 recycler = binding.recyclerView;
+                // Passing fragment manager to my adapter here so I can modify fragments from the recyclerview.
                 adapter = RecycleAdapter(fragmentManager = parentFragmentManager, requireContext(), passedImages)
                 recycler.layoutManager = LinearLayoutManager(requireContext())
                 recycler.adapter = adapter
@@ -56,7 +56,7 @@ class SavedQrCodesFragment : Fragment(R.layout.saved_qr_codes_fragment) {
         )
     }
 
-        // Avoid memory leaks
+        // This helps avoid memory leaks.
         override fun onDestroyView() {
             super.onDestroyView()
             _binding = null
