@@ -18,4 +18,7 @@
     <string name="password_tip">A password must contain both upper and lower case characters and at least one digit.</string>
     <string name="qr_code_saved_to_cloud">"Qr Code Saved to Cloud!"</string>
     <string name="too_many_qr_codes_message">"You have reached the max cap of 100 Qr Codes!"</string>
+    <string name="qr_code_saved_to_gallery">"Qr Code Saved to Gallery!"</string>
+    <string name="sign_in_failed">Sign in failed</string>
+    <string name="sign_up_failed">Sign up failed</string>
 </resources>

@@ -70,7 +70,7 @@ class EmailPasswordActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         baseContext,
-                        "Sign In Failed. ${task.exception?.message}",
+                        "${getString(R.string.sign_in_failed)} ${task.exception?.message}",
                         Toast.LENGTH_LONG,
                     ).show()
                 }
@@ -86,7 +86,7 @@ class EmailPasswordActivity : AppCompatActivity() {
                     binding.passwordTip.visibility = View.VISIBLE;
                     Toast.makeText(
                         baseContext,
-                        "Sign Up Failed. ${task.exception?.message}",
+                        "${getString(R.string.sign_up_failed)} ${task.exception?.message}",
                         Toast.LENGTH_LONG,
                     ).show()
                 }

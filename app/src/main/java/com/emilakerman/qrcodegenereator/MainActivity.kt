@@ -228,7 +228,6 @@ class MainActivity : AppCompatActivity() {
                             }
                             val fragmentToCommit = SavedQrCodesFragment.newInstance(images)
                             transaction.replace(R.id.fragment_container_view, fragmentToCommit).commit()
-                            println("Data: $images")
                         } catch (e: Exception) {
                             println("Error: ${e.message}")
                         }

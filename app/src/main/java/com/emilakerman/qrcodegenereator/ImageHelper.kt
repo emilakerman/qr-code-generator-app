@@ -101,7 +101,7 @@ class ImageHelper {
         }
         fos?.use {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            Toast.makeText(context, "QR Code Saved to Gallery!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.qr_code_saved_to_gallery), Toast.LENGTH_SHORT).show()
         }
     }
 }
