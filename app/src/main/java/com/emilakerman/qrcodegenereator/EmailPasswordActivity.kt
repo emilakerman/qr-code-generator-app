@@ -2,6 +2,7 @@ package com.emilakerman.qrcodegenereator
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,10 +17,14 @@ class EmailPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEmailPasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val orientation = resources.configuration.orientation
+
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(windowToken, 0)
-            binding.qrHeaderImage.visibility = View.VISIBLE
+            if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                binding.qrHeaderImage.visibility = View.VISIBLE
+            }
         }
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
@@ -33,7 +38,9 @@ class EmailPasswordActivity : AppCompatActivity() {
         // Extra check.
         binding.editTextTextEmailAddress.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
         binding.editTextTextPassword.setOnClickListener { binding.qrHeaderImage.visibility = View.GONE }
-
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.qrHeaderImage.visibility = View.GONE
+        }
         binding.signInButton.setOnClickListener {
             it.hideKeyboard()
             if (fieldsEmpty()) {
