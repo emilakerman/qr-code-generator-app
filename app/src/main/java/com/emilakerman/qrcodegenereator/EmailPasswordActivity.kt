@@ -2,7 +2,6 @@ package com.emilakerman.qrcodegenereator
 
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -20,6 +19,7 @@ class EmailPasswordActivity : AppCompatActivity() {
         fun View.hideKeyboard() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(windowToken, 0)
+            binding.qrHeaderImage.visibility = View.VISIBLE
         }
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
@@ -27,11 +27,12 @@ class EmailPasswordActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance();
         binding.qrHeaderImage.setImageResource(R.drawable.image);
-        binding.editTextTextEmailAddress.setOnFocusChangeListener { view, b -> binding.qrHeaderImage.visibility = View.GONE }
-        binding.editTextTextPassword.setOnFocusChangeListener { view, b -> binding.qrHeaderImage.visibility = View.GONE }
+        // Hides the QR Header Code when typing in fields. Helps smaller screens.
+        binding.editTextTextEmailAddress.setOnFocusChangeListener { _, b -> binding.qrHeaderImage.visibility = View.GONE }
+        binding.editTextTextPassword.setOnFocusChangeListener { _, b -> binding.qrHeaderImage.visibility = View.GONE }
+
         binding.signInButton.setOnClickListener {
             it.hideKeyboard()
-            binding.qrHeaderImage.visibility = View.VISIBLE
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
@@ -40,7 +41,6 @@ class EmailPasswordActivity : AppCompatActivity() {
         }
         binding.signUpButton.setOnClickListener {
             it.hideKeyboard()
-            binding.qrHeaderImage.visibility = View.VISIBLE
             if (fieldsEmpty()) {
                 return@setOnClickListener;
             } else {
@@ -55,7 +55,7 @@ class EmailPasswordActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and redirects user to mainactivity.
+        // Check if user is signed in (non-null) and redirects user to MainActivity.
         if (auth.currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

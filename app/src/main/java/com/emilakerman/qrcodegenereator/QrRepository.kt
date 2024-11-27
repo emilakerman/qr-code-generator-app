@@ -43,7 +43,6 @@ class QrRepository {
 
         // Create the request
         val request = Request.Builder()
-            //NOTE: This works now but I turned off auth protection.
             .url("${keys.baseUrl}putQR")
             .addHeader("user", auth.currentUser?.uid.toString())
             .put(requestBody)
